@@ -37,14 +37,13 @@ void spellCheck(char article[], char dictionary[]) {
     while (article[start]) {
         while (!isSmallLetter(article[start]) && !isBigLetter(article[start])) {
             start++;
+            if (!article[start]) return;
         }
         end = start;
-        while (isSmallLetter(article[end]) || isBigLetter(article[end])) {
+        while ((isSmallLetter(article[end]) || isBigLetter(article[end]))) {
             end++;
         }
         printString(article, start, end);
-        printf("start: %d\n", start);
-        printf("end: %d\n", end);
         start = end;
     }
 }
@@ -63,6 +62,7 @@ char checkString(char word[], char dictionary[]) {
     while (dictionary[dict] != '\n') {
         dict++;
     }
+    return 1;
 }
 
 char isSmallLetter(char letter) {

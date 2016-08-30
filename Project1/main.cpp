@@ -38,7 +38,7 @@ void readFile(const char file_name[], char buffer[]) {
 void fruityTest(void) {
 	printf("\n\n******* Starting Base Test #1 (fruity) *******\n");
 	char dictionary[] = "apple\nbanana\norange\npear\n";
-	char article[] = "I ate an apple and a pear\n";
+	char article[] = "I ate an apple and a pear.";
 	spellCheck(article, dictionary); // should print: ate, an, and 
 	printf("****DONE****\n");
 }
@@ -78,10 +78,9 @@ void generalTest2(void) {
 /* you should also make your own tests! */
 int main(void) {
     /* for starters, uncomment the following tests, one at a time */
-   // fruityTest();
-    spellCheck("This is a sentence", "hello\nworld\n");
-   // dogTest();
-   // punctuationTests();
-   // generalTest1();
-   // generalTest2();
+    fruityTest();
+    dogTest();
+    punctuationTests();
+    generalTest1();
+    generalTest2();
 }	
