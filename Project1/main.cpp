@@ -13,7 +13,7 @@ char dictionary[BUFFER_SIZE]; // a large buffer to hold a dictionary (1MB)
 char article[BUFFER_SIZE]; // a large buffer to hold an article (1MB)
 
 void spellCheck(char[], char[]); // this is the function you write (put your function in Project1.cpp
-
+void checkString(char[], char[]);
 /*
  * Read a .txt file into one of the two buffers
  * this function does NOT confirm that the file is correctly formatted
@@ -78,9 +78,10 @@ void generalTest2(void) {
 /* you should also make your own tests! */
 int main(void) {
     /* for starters, uncomment the following tests, one at a time */
-    fruityTest();
-    dogTest();
-    punctuationTests();
-    generalTest1();
-    generalTest2();
+   // fruityTest();
+   // dogTest();
+   // punctuationTests();
+   // generalTest1();
+   // generalTest2();
+    checkString("navsainisi", "lol\nhello\nlmao");
 }	

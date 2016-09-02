@@ -29,6 +29,7 @@
 void printString(char x[], int start, int end);
 char isSmallLetter(char letter);
 char isBigLetter(char letter);
+char checkString(char word[], char dictionary[]);
 
 void spellCheck(char article[], char dictionary[]) {
     int start = 0;
@@ -51,18 +52,34 @@ void spellCheck(char article[], char dictionary[]) {
 char checkString(char word[], char dictionary[]) {
     int index = 0;
     int dict = 0;
-
-    // Keep checking word with current word in dictionary
-    while  (word[index] == dictionary[dict]) {
-        index++; dict++;
+    while (dictionary[dict]) {
+        // Keep checking word with current word in dictionary
+        while  (word[index] == dictionary[dict]) {
+            printf("index: %d\n", index);
+            printf("dict %d\n", dict);
+            if (!word[index] && (!dictionary[dict] || dictionary[dict] == '\n')) {
+                printf("Word found bitch!\n");
+                return 1;
+            }
+            dict++;
+            index++;
+        }
+        
+        // If you get a match, word[index] will be \0 and dictionary[dict] will be \n
+        if ((dictionary[dict] == '\n' || !dictionary[dict]) && !word[index]) {
+            printf("Word found!\n");
+            return 1;
+        }
+        index = 0;
+        // Look for next word
+        while (dictionary[dict++] != '\n') {
+            if (!dictionary[dict]) {
+                printf("Word not found bitch\n");
+                return 0;
+            }
+        }
     }
-    // If you get a match, word[index] will be \0 and dictionary[dict] will be \n
-    if (dictionary[dict] == '\n') return 1;
-    // Look for next word
-    while (dictionary[dict] != '\n') {
-        dict++;
-    }
-    return 1;
+    return 0;
 }
 
 char isSmallLetter(char letter) {
