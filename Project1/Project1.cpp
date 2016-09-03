@@ -26,10 +26,11 @@
  * almost certainly find it easiest to just write everything you need from scratch!
  */
 
-void printString(char x[], int start, int end);
 char isSmallLetter(char letter);
 char isBigLetter(char letter);
-char checkString(char word[], char dictionary[]);
+char checkString(char article[], int start, int end, char dictionary[]);
+char convertToSmall(char letter);
+void printString(char article[], int start, int end);
 
 void spellCheck(char article[], char dictionary[]) {
     int start = 0;
@@ -44,37 +45,46 @@ void spellCheck(char article[], char dictionary[]) {
         while ((isSmallLetter(article[end]) || isBigLetter(article[end]))) {
             end++;
         }
-        printString(article, start, end);
+        if (!checkString(article, start, end, dictionary) && (end - start) > 1) {
+            printString(article, start, end);
+        }
         start = end;
     }
 }
 
-char checkString(char word[], char dictionary[]) {
+char checkString(char article[], int start, int end, char dictionary[]) {
+    char word[end - start + 1];
+    int j = 0;
+    for (int k = start; k < end; k++, j++) {
+        word[j] = article[k];
+    }
+    word[j] = '\0';
+   // printf("formed word: %s\n", word);
+
     int index = 0;
     int dict = 0;
     while (dictionary[dict]) {
         // Keep checking word with current word in dictionary
-        while  (word[index] == dictionary[dict]) {
-            printf("index: %d\n", index);
-            printf("dict %d\n", dict);
+        while  (convertToSmall(word[index]) == convertToSmall(dictionary[dict])) {
+           // printf("index: %d\n", index);
+           // printf("dict %d\n", dict);
             if (!word[index] && (!dictionary[dict] || dictionary[dict] == '\n')) {
-                printf("Word found bitch!\n");
+               // printf("%s\n", word);
                 return 1;
             }
             dict++;
             index++;
-        }
-        
+        }        
         // If you get a match, word[index] will be \0 and dictionary[dict] will be \n
         if ((dictionary[dict] == '\n' || !dictionary[dict]) && !word[index]) {
-            printf("Word found!\n");
+           // printf("%s\n", word);
             return 1;
         }
         index = 0;
         // Look for next word
         while (dictionary[dict++] != '\n') {
             if (!dictionary[dict]) {
-                printf("Word not found bitch\n");
+                printf("Word not found\n");
                 return 0;
             }
         }
@@ -83,13 +93,18 @@ char checkString(char word[], char dictionary[]) {
 }
 
 char isSmallLetter(char letter) {
-    if (letter > 0x60 && letter < 0x7b) return 1;
+    if (letter >= 'a' && letter <= 'z') return 1;
     return 0;
 }
 
 char isBigLetter(char letter) {
-    if (letter > 0x40 && letter < 0x5b) return 1;
+    if (letter >= 'A' && letter <= 'Z') return 1;
     return 0;
+}
+
+char convertToSmall(char letter) {
+    if (isBigLetter(letter)) return letter + 0x20;
+    return letter;
 }
 
 void printString(char x[], int start, int end) {
