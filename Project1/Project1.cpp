@@ -59,32 +59,26 @@ char checkString(char article[], int start, int end, char dictionary[]) {
         word[j] = article[k];
     }
     word[j] = '\0';
-   // printf("formed word: %s\n", word);
 
     int index = 0;
     int dict = 0;
     while (dictionary[dict]) {
         // Keep checking word with current word in dictionary
         while  (convertToSmall(word[index]) == convertToSmall(dictionary[dict])) {
-           // printf("index: %d\n", index);
-           // printf("dict %d\n", dict);
             if (!word[index] && (!dictionary[dict] || dictionary[dict] == '\n')) {
-               // printf("%s\n", word);
                 return 1;
             }
             dict++;
             index++;
         }        
-        // If you get a match, word[index] will be \0 and dictionary[dict] will be \n
+        // If you get a match, word[index] will be \0 and dictionary[dict] will be \n or \0
         if ((dictionary[dict] == '\n' || !dictionary[dict]) && !word[index]) {
-           // printf("%s\n", word);
             return 1;
         }
         index = 0;
         // Look for next word
         while (dictionary[dict++] != '\n') {
             if (!dictionary[dict]) {
-                printf("Word not found\n");
                 return 0;
             }
         }
@@ -107,9 +101,9 @@ char convertToSmall(char letter) {
     return letter;
 }
 
-void printString(char x[], int start, int end) {
+void printString(char article[], int start, int end) {
     for (int k = start; k < end; k++) {
-        printf("%c", x[k]);
+        printf("%c", article[k]);
     }
     printf("\n");
 }
