@@ -32,6 +32,17 @@ char checkString(char article[], int start, int end, char dictionary[]);
 char convertToSmall(char letter);
 void printString(char article[], int start, int end);
 
+
+/*
+ * [NAME] spellCheck
+ * [Brief] checks if a word is spelled correctly
+ * [Returns] void
+ * [IN] char[] article, char[] dictionary
+ *
+ * [Summary] Checks each word in the article against the words in the dictionary to see if 
+ * there is a match and prints it if there is no match
+ */
+
 void spellCheck(char article[], char dictionary[]) {
     int start = 0;
     int end = 0;
@@ -42,15 +53,25 @@ void spellCheck(char article[], char dictionary[]) {
             if (!article[start]) return;
         }
         end = start;
-        while ((isSmallLetter(article[end]) || isBigLetter(article[end]))) {
+        while (isSmallLetter(article[end]) || isBigLetter(article[end])) {
             end++;
         }
-        if (!checkString(article, start, end, dictionary) && (end - start) > 1) {
-            printString(article, start, end);
+        if ((end - start) > 1) {
+            if (!checkString(article, start, end, dictionary)) printString(article, start, end);
         }
         start = end;
     }
 }
+
+/*
+ * [NAME] checkString
+ * [Brief] checks if a word is in the dictionary
+ * [Returns] 1 for found word, 0 for not found word
+ * [IN] char[] article, int start, int end, char[] dictionary
+ *
+ * [Summary] Checks if a specific word in the article is in the dictionary
+ * and returns a 1 if the word can be found in the dictionary or returns 0 otherwise
+ */
 
 char checkString(char article[], int start, int end, char dictionary[]) {
     char word[end - start + 1];
@@ -86,20 +107,60 @@ char checkString(char article[], int start, int end, char dictionary[]) {
     return 0;
 }
 
+/*
+ * [NAME] isSmallLetter
+ * [Brief] checks if a character is a lowercase character
+ * [Returns] 1 for lowercase letter, 0 otherwise
+ * [IN] char letter
+ *
+ * [Summary] Checks if a letter is a lowercase letter, returns 1 if it is
+ * and returns 0 otherwise
+ */
+
 char isSmallLetter(char letter) {
     if (letter >= 'a' && letter <= 'z') return 1;
     return 0;
 }
+
+/*
+ * [NAME] isBigLetter
+ * [Brief] checks if a character is an uppercase character
+ * [Returns] 1 for uppercase letter, 0 otherwise
+ * [IN] char letter
+ *
+ * [Summary] Checks if a letter is an uppercase letter, returns 1 if it is
+ * and returns 0 otherwise
+ */
 
 char isBigLetter(char letter) {
     if (letter >= 'A' && letter <= 'Z') return 1;
     return 0;
 }
 
+/*
+ * [NAME] convertToSmall
+ * [Brief] returns the lowercase version of a letter
+ * [Returns] lowercase letter
+ * [IN] char letter
+ *
+ * [Summary] Checks if the given letter is uppercase, converts it to lowercase,
+ * otherwise returns the original letter
+ */
+
 char convertToSmall(char letter) {
     if (isBigLetter(letter)) return letter + 0x20;
     return letter;
 }
+
+/*
+ * [NAME] printString
+ * [Brief] prints a word in the article
+ * [Returns] void
+ * [IN] char[] article, int start, int end
+ *
+ * [Summary] Given a starting and ending index, prints a part of the article,
+ * used to print words in the article
+ */
 
 void printString(char article[], int start, int end) {
     for (int k = start; k < end; k++) {
@@ -107,10 +168,3 @@ void printString(char article[], int start, int end) {
     }
     printf("\n");
 }
-
-
-
-
-
-
-

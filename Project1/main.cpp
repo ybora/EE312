@@ -37,7 +37,7 @@ void readFile(const char file_name[], char buffer[]) {
 void fruityTest(void) {
 	printf("\n\n******* Starting Base Test #1 (fruity) *******\n");
 	char dictionary[] = "apple\nbanana\norange\npear\n";
-	char article[] = "I ate an apple and a pear.";
+	char article[] = "I ate an apple and a pear\n";
 	spellCheck(article, dictionary); // should print: ate, an, and 
 	printf("****DONE****\n");
 }
@@ -75,6 +75,40 @@ void generalTest2(void) {
 }
 
 /* you should also make your own tests! */
+
+void ownCase1(void) {
+printf("\n\n******* Starting own Case #1 *******\n");
+char article[] = "";
+readFile("american-english.txt", dictionary);
+spellCheck(article, dictionary);/*prints out nothing*/
+printf("****DONE****\n");
+}
+void ownCase2(void) {
+printf("\n\n******* Starting own Case #2 *******\n");
+readFile("bobsledding.txt", article);
+char dictionary[] = ""; /*prints out every "word" in the article*/
+spellCheck(article, dictionary);
+printf("****DONE****\n");
+
+}
+void ownCase3(void) {
+printf("\n\n******* Starting own Case #3 *******\n");
+char article[] = " 42342the dog walked home342 ";
+char dictionary[] = "the\ndog\nwalk\nhome\n"; /*should print out "walked\n"*/
+spellCheck(article, dictionary);
+printf("****DONE****\n");
+
+}
+void ownCase4(void) {
+printf("\n\n******* Starting own Case #4 *******\n");
+char article[] = " a";
+char dictionary[] = "the\ndog\nwalk\nhome\n"; /*should print out nothing*/
+spellCheck(article, dictionary);
+printf("****DONE****\n");
+
+}
+
+/* you should also make your own tests! */
 int main(void) {
     /* for starters, uncomment the following tests, one at a time */
     fruityTest();
@@ -82,4 +116,8 @@ int main(void) {
     punctuationTests();
     generalTest1();
     generalTest2();
+    ownCase1();
+    ownCase2();
+    ownCase3();
+    ownCase4();
 }	
