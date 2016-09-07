@@ -117,7 +117,7 @@ int main(void) {
     generalTest1();
     generalTest2();
     ownCase1();
-    ownCase2();
+  //  ownCase2();
     ownCase3();
     ownCase4();
 }	

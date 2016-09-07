@@ -48,17 +48,26 @@ void spellCheck(char article[], char dictionary[]) {
     int end = 0;
 
     while (article[start]) {
+        /* Find the start of a word */
         while (!isSmallLetter(article[start]) && !isBigLetter(article[start])) {
             start++;
-            if (!article[start]) return;
+            if (!article[start]) 
+                return;
         }
         end = start;
+
+        /* Find the end of the word */
         while (isSmallLetter(article[end]) || isBigLetter(article[end])) {
             end++;
         }
+
+        /* Only check word if it is more than two letters */
         if ((end - start) > 1) {
-            if (!checkString(article, start, end, dictionary)) printString(article, start, end);
+            if (!checkString(article, start, end, dictionary)) 
+                printString(article, start, end);
         }
+
+        /* Reset starting point */
         start = end;
     }
 }
@@ -76,30 +85,32 @@ void spellCheck(char article[], char dictionary[]) {
 char checkString(char article[], int start, int end, char dictionary[]) {
     char word[end - start + 1];
     int j = 0;
+
+    /* Copy the word into its own array */
     for (int k = start; k < end; k++, j++) {
         word[j] = article[k];
     }
     word[j] = '\0';
 
-    int index = 0;
-    int dict = 0;
-    while (dictionary[dict]) {
-        // Keep checking word with current word in dictionary
-        while  (convertToSmall(word[index]) == convertToSmall(dictionary[dict])) {
-            if (!word[index] && (!dictionary[dict] || dictionary[dict] == '\n')) {
-                return 1;
-            }
-            dict++;
-            index++;
+    int wordIndex = 0;
+    int dictIndex = 0;
+
+    /* Go through the dictionary and check if a word exists */
+    while (dictionary[dictIndex]) {
+        while  (convertToSmall(word[wordIndex]) == convertToSmall(dictionary[dictIndex])) {
+            dictIndex++;
+            wordIndex++;
         }        
-        // If you get a match, word[index] will be \0 and dictionary[dict] will be \n or \0
-        if ((dictionary[dict] == '\n' || !dictionary[dict]) && !word[index]) {
+
+        /* If you get a match, word[wordIndex] will be \0 and dictionary[dictIndex] will be \n  */
+        if (dictionary[dictIndex] == '\n' && !word[wordIndex]) {
             return 1;
         }
-        index = 0;
-        // Look for next word
-        while (dictionary[dict++] != '\n') {
-            if (!dictionary[dict]) {
+        wordIndex = 0;
+
+        /* Look for next word in dictionary */
+        while (dictionary[dictIndex++] != '\n') {
+            if (!dictionary[dictIndex]) {
                 return 0;
             }
         }
