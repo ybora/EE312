@@ -30,17 +30,21 @@ int32_t isOurs(char* s) {
 /* allocate a utstring on the heap, initialize the string correctly by copying
  * the characters from 'src' and return a pointer to the first character of actual string data */
 char* utstrdup(const char* src) {
+	if (src == NULL) 
+		return NULL;
 	int length = 0;
-	for (int k = 0; src[k]; k++) {
+	int k;
+	for (k = 0; src[k]; k++) {
 		length++;
 	}
 	String* utstr = (String *) malloc(sizeof(String) + length + 1);
 	utstr->length = length;
 	utstr->capacity = length;
 	utstr->check = SIGNATURE;
-	for (int k = 0; k < length; k++) {
+	for (k = 0; k < length; k++) {
 		utstr->data[k] = src[k];
 	}
+	utstr->data[k] = 0;
 	return utstr->data;
 }
 
@@ -49,6 +53,7 @@ char* utstrdup(const char* src) {
 /* the parameter 'utstr' must be a utstring. Find the length of this string by accessing the meta-data
  * and return that length */
 uint32_t utstrlen(const char* utstr) {
+	assert(STRING(utstr)->check == SIGNATURE);
 	return STRING(utstr)->length;
 }
 
@@ -57,12 +62,16 @@ uint32_t utstrlen(const char* utstr) {
  * only append as many characters as will actually fit in s. Update the length meta-data for utstring s
  * and then return s */
 char* utstrcat(char* s, const char* suffix) {
+	assert(isOurs(s));
+	if (suffix == NULL)
+		return NULL;
 	int length = utstrlen(s);
-	int j = 0;
-	for (int k = length; suffix[j] && k < STRING(s)->capacity; k++, j++) {
+	int k, j = 0;
+	for (k = length; suffix[j] && k < STRING(s)->capacity; k++, j++) {
 		s[k] = suffix[j];
 	}
-	STRING(s)->length = length + j;
+	s[k] = 0;
+	STRING(s)->length = k;
 	return s;
 }
 
@@ -73,10 +82,14 @@ char* utstrcat(char* s, const char* suffix) {
  * characters. Do not allocate any additional storage, do not change capacity. Update the length
  * meta-data for dst and then return dst */
 char* utstrcpy(char* dst, const char* src) {
+	assert(isOurs(dst));
+	if (src == NULL) 
+		return NULL;
 	int k;
-	for (k = 0; k < STRING(src)->length && k < STRING(dst)->capacity; k++) {
+	for (k = 0; k < strlen(src) && k < STRING(dst)->capacity; k++) {
 		dst[k] = src[k];
 	}
+	dst[k] = 0;
 	STRING(dst)->length = k;
 	return dst;
 }
@@ -85,6 +98,7 @@ char* utstrcpy(char* dst, const char* src) {
  * (i.e., locate the start of the chunk and call free to dispose of the chunk, note that the start of
  * the chunk will be 12 bytes before *self) */
 void utstrfree(char* self) {
+	assert(isOurs(self));
 	free(STRING(self));
 }
 
@@ -96,10 +110,11 @@ void utstrfree(char* self) {
  * new storage. Update the meta-data to correctly describe new new utstring you've created, deallocate s
  * and then return a pointer to the first character in the newly allocated storage */
 char* utstrrealloc(char* s, uint32_t new_capacity) {
+	assert(isOurs(s));
 	if (new_capacity > STRING(s)->capacity) {
 		String* new_string = (String *) malloc(sizeof(String) + new_capacity + 1);
 		strcpy(new_string->data, s);
-		new_string->length = STRING(s)->length;
+		new_string->length = utstrlen(s);
 		new_string->capacity = new_capacity;
 		new_string->check = STRING(s)->check;
 		utstrfree(s);
@@ -107,6 +122,3 @@ char* utstrrealloc(char* s, uint32_t new_capacity) {
 	}
 	return s;
 }
-
-
-

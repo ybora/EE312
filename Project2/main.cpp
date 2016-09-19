@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include <string.h> // declares the built-in C string library functions, like strcat
 #include "String.h" // declares our new improved String functions, like utstrcat
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+
 
 void testStage1(void) {
 	char p[12];
@@ -90,6 +95,31 @@ void testStage3(void) {
 	utstrfree(ut_str1);
 }
 
+void testStage5() {
+	char *string = "Running Club";
+	char *dup = utstrdup(string);
+	printf("%s\n", dup);
+	printf("%d\n", (strlen(dup) == utstrlen(dup)));
+	dup = utstrdup("");
+	printf("%s\n", dup);
+	printf("%d\n", (strlen(dup) == utstrlen(dup)));
+	dup = utstrrealloc(dup, 20);
+	dup = utstrcpy(dup, string);
+	printf("%s\n", dup);
+	printf("%d\n", (strlen(dup) == utstrlen(dup)));
+	char *sux = " sux";
+	dup = utstrcat(dup, sux);
+	printf("%s\n", dup);
+	printf("%d\n", (strlen(dup) == utstrlen(dup)));
+	char *horsePoop = " horse poop";
+	dup = utstrcat(dup, horsePoop);
+	printf("%s\n", dup);
+	printf("%d\n", (strlen(dup) == utstrlen(dup)));
+	dup = utstrrealloc(dup, 2);
+	printf("%d\n", ((*(dup - 8)) == 20));
+	dup = utstrcat(dup, "");
+}
+
 
 #ifdef READY_FOR_STAGE_4
 void testStage4(void) {
@@ -119,15 +149,19 @@ void testStage4(void) {
 #endif /* READY_FOR_STAGE_4 */
 
 int main(void) {
+	char p[20];
+	// printf("crashing with utstrlen\n\n\n"); utstrlen("Hello World");	
+	// printf("crashing with utstrcpy\n\n\n"); utstrcpy(p, "Hello World");
+	// printf("crashing with utstrcat\n\n\n"); utstrcat(p, "Hello World");
+	// printf("crashing with utstrfree\n\n\n"); utstrfree((char *)malloc(20));
+	printf("crashing with utstrrealloc\n\n\n"); utstrrealloc((char *)malloc(20), 40);
 	testStage1();
 	testStage2();
 	testStage3();
-	// printf("yo\n");
-	// char* ut_str1 = utstrdup("hello world");
-	// ut_str1 = utstrrealloc(ut_str1, 20);
+	testStage5();
 
-	// utstrcat(ut_str1, "helloworldhello");
-	// printf("%s\n", ut_str1);
+	
+
 
 #ifdef READY_FOR_STAGE_4	
 	testStage4();
