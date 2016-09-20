@@ -154,7 +154,7 @@ int main(void) {
 	// printf("crashing with utstrcpy\n\n\n"); utstrcpy(p, "Hello World");
 	// printf("crashing with utstrcat\n\n\n"); utstrcat(p, "Hello World");
 	// printf("crashing with utstrfree\n\n\n"); utstrfree((char *)malloc(20));
-	printf("crashing with utstrrealloc\n\n\n"); utstrrealloc((char *)malloc(20), 40);
+	// printf("crashing with utstrrealloc\n\n\n"); utstrrealloc((char *)malloc(20), 40);
 	testStage1();
 	testStage2();
 	testStage3();
