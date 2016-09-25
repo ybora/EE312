@@ -21,7 +21,8 @@
 
 /* this simple function can be useful when you implement stage 4
  * you are not required to use the function, and you can implement stage 4 without it */
-int32_t isOurs(char* s) {
+int32_t isOurs(char* s) 
+{
     /*if (!isHeapVar(s)) { return 0; }*//*Removed: Michael Bartling: 06/21/2016*/
     if (STRING(s)->check == SIGNATURE) { return 1; }
     else { return 0; }
@@ -150,7 +151,8 @@ char* utstrcpy(char* dst, const char* src)
  *
  * [Summary] Frees the memory allocated for the UT String that is passed in
  */
- void utstrfree(char* self) {
+ void utstrfree(char* self) 
+ {
 	assert(isOurs(self));
 	free(STRING(self));
 }
@@ -172,7 +174,8 @@ char* utstrcpy(char* dst, const char* src)
  * [Summary] Increases the capacity of the given UT String to the specified new capacity
  *  by allocating more memory and then freeing the originally occupied memory
  */
-char* utstrrealloc(char* s, uint32_t new_capacity) {
+char* utstrrealloc(char* s, uint32_t new_capacity) 
+{
 	assert(isOurs(s));
 
 	// Only reallocate if the new capacity is greater than the original
