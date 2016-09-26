@@ -23,6 +23,7 @@ void updateNode(Node*, String, String, int);
 void printError(String, String);
 Node* createNewNode();
 Node* isInLinkedList(Node*, String, String, int);
+Node** findMaxNodes();
 
 String bottle;
 String diaper;
@@ -30,6 +31,7 @@ String rattle;
 
 typedef struct Database {
 	Node* root;
+	int size;
 	int numRattles;
 	int numDiapers;
 	int numBottles;
@@ -37,12 +39,13 @@ typedef struct Database {
 
 /* you'll probably need several more global variables */
 /* and of course, you have a few functions to write */
-Database db = {NULL, 0, 0, 0};
+Database db = {NULL, 0, 0, 0, 0};
 
 /* clear the inventory and reset the customer database to empty */
 void reset(void) {
 	/* your code here */
 	db.root = NULL;
+	db.size = 0;
 	db.numRattles = 0;
 	db.numBottles = 0;
 	db.numDiapers = 0;
@@ -52,10 +55,34 @@ void reset(void) {
 }
 
 void processSummarize() {
+	printLL();
+	Node** maxNodes = findMaxNodes();
+	printf("There are %d Bottles, %d Diapers, and %d Rattles in inventory\n", db.numBottles, db.numDiapers, db.numRattles);
+	printf("we have had a total of %d different customers\n", db.size);
 
+	for (int k = 0; k < 3; k++) {
+		if (k == 0) {
+			if (maxNodes[k]->customer.bottles != 0)
+				printf("%s has purchased the most Bottles (%d)\n", maxNodes[k]->customer.name.ptr, maxNodes[k]->customer.bottles);
+			else 
+				printf("no one has purchased any Bottles");
+		}
+		if (k == 1) {
+			if (maxNodes[k]->customer.diapers != 0)
+				printf("%s has purchased the most Diapers (%d)\n", maxNodes[k]->customer.name.ptr, maxNodes[k]->customer.diapers);
+			else
+				printf("no one has purchased any Diapers");
+		}
+		if (k == 2) {
+			if (maxNodes[k]->customer.rattles != 0)
+				printf("%s has purchased the most Rattles (%d)\n", maxNodes[k]->customer.name.ptr, maxNodes[k]->customer.rattles);
+			else
+				printf("no one has purchased any Rattles");
+		}
+	}
 }
 
-Node* findMaxNodes(String itemType) {
+Node** findMaxNodes() {
 	Node** nodes = (Node**) malloc(3 * sizeof(Node*));
 
 	Node* current = db.root;
@@ -64,20 +91,15 @@ Node* findMaxNodes(String itemType) {
 	nodes[2] = current;
 
 	while (current != NULL) {
-		if (StringIsEqualTo(&itemType, &bottle)) {
-			if (current->customer.bottles > nodes[0]->customer.bottles)
-				nodes[0] = current;
-		}
-		else if (StringIsEqualTo(&itemType, &diaper)) {
-			if (current->customer.diapers > nodes[1]->customer.diapers)
-				nodes[1] = current;
-		}
-		else if (StringIsEqualTo(&itemType, &rattle)) {
-			if (current->customer.rattles > nodes[2]->customer.rattles)
-				nodes[2] = current;
-		}
+		if (current->customer.bottles > nodes[0]->customer.bottles)
+			nodes[0] = current;
+		if (current->customer.diapers > nodes[1]->customer.diapers)
+			nodes[1] = current;
+		if (current->customer.rattles > nodes[2]->customer.rattles)
+			nodes[2] = current;
+		current = current->next;
 	}
-	return max;
+	return nodes;
 }
 
 void processPurchase() {
@@ -90,10 +112,10 @@ void processPurchase() {
 	int amount;
 	readNum(&amount);
 
-	printf("Purchase ");
-	printf("%s ", name.ptr);
-	printf("%s ", itemType.ptr);
-	printf("%d\n", amount);
+	// printf("Purchase ");
+	// printf("%s ", name.ptr);
+	// printf("%s ", itemType.ptr);
+	// printf("%d\n", amount);
 
 	Node* exists = isInLinkedList(db.root, name, itemType, amount);
 	if (!exists) {
@@ -104,17 +126,18 @@ void processPurchase() {
 		}
 	} 
 
-	printf("bottles in inventory: %d\n", db.numBottles);
-	printf("diapers in inventory: %d\n", db.numDiapers);
-	printf("rattles in inventory: %d\n", db.numRattles);
-	printLL();
-	printf("------------------------------\n");
+	// printf("bottles in inventory: %d\n", db.numBottles);
+	// printf("diapers in inventory: %d\n", db.numDiapers);
+	// printf("rattles in inventory: %d\n", db.numRattles);
+	// printLL();
+	// printf("------------------------------\n");
 
 }
 
 void insertNodeAtFront(Node* node) {
 	node->next = db.root;
 	db.root = node;
+	db.size++;
 }
 
 void printError(String name, String itemType) {
