@@ -17,9 +17,11 @@ typedef struct Node {
 
 void printLL();
 void createItems();
-Node* createNewNode(String, String, int);
 void insertNodeAtFront(Node*);
-char updateInventory(String, int);
+char updateInventory(String, String, int);
+void updateNode(Node*, String, String, int);
+void printError(String, String);
+Node* createNewNode();
 Node* isInLinkedList(Node*, String, String, int);
 
 String bottle;
@@ -49,7 +51,34 @@ void reset(void) {
 	StringDestroy(&rattle);
 }
 
-void processSummarize() {}
+void processSummarize() {
+
+}
+
+Node* findMaxNodes(String itemType) {
+	Node** nodes = (Node**) malloc(3 * sizeof(Node*));
+
+	Node* current = db.root;
+	nodes[0] = current;
+	nodes[1] = current;
+	nodes[2] = current;
+
+	while (current != NULL) {
+		if (StringIsEqualTo(&itemType, &bottle)) {
+			if (current->customer.bottles > nodes[0]->customer.bottles)
+				nodes[0] = current;
+		}
+		else if (StringIsEqualTo(&itemType, &diaper)) {
+			if (current->customer.diapers > nodes[1]->customer.diapers)
+				nodes[1] = current;
+		}
+		else if (StringIsEqualTo(&itemType, &rattle)) {
+			if (current->customer.rattles > nodes[2]->customer.rattles)
+				nodes[2] = current;
+		}
+	}
+	return max;
+}
 
 void processPurchase() {
 	createItems();
@@ -61,22 +90,25 @@ void processPurchase() {
 	int amount;
 	readNum(&amount);
 
+	printf("Purchase ");
+	printf("%s ", name.ptr);
+	printf("%s ", itemType.ptr);
+	printf("%d\n", amount);
+
 	Node* exists = isInLinkedList(db.root, name, itemType, amount);
 	if (!exists) {
-		if (updateInventory(itemType, amount)) {
-			Node* n = createNewNode(name, itemType, amount);
+		if (updateInventory(name, itemType, amount)) {
+			Node* n = createNewNode();
+			updateNode(n, name, itemType, amount);
 			insertNodeAtFront(n);
 		}
-		printf("exists is null\n");
-	} else {
-
-		printf("exists is not null: %s was found and updated\n", exists->customer.name.ptr);
-	}
+	} 
 
 	printf("bottles in inventory: %d\n", db.numBottles);
 	printf("diapers in inventory: %d\n", db.numDiapers);
 	printf("rattles in inventory: %d\n", db.numRattles);
 	printLL();
+	printf("------------------------------\n");
 
 }
 
@@ -85,20 +117,27 @@ void insertNodeAtFront(Node* node) {
 	db.root = node;
 }
 
-Node* createNewNode(String name, String itemType, int amount) {
+void printError(String name, String itemType) {
+	if (StringIsEqualTo(&itemType, &bottle)) {
+		printf("Sorry %s, we only have %d %s\n", name.ptr, db.numBottles, itemType.ptr);
+	}
+	else if (StringIsEqualTo(&itemType, &diaper)) {
+		printf("Sorry %s, we only have %d %s\n", name.ptr, db.numDiapers, itemType.ptr);
+	}
+	else if (StringIsEqualTo(&itemType, &rattle)) {
+		printf("Sorry %s, we only have %d %s\n", name.ptr, db.numRattles, itemType.ptr);
+	}
+}
+
+// TODO: add name param
+Node* createNewNode() {
 	Node* newNode = (Node *) malloc(sizeof(Node));
+
 	newNode->next = NULL;
-	newNode->customer.name = name;
+	newNode->customer.name = StringCreate("");
 	newNode->customer.bottles = 0;
 	newNode->customer.diapers = 0;
 	newNode->customer.rattles = 0;
-
-	if (StringIsEqualTo(&itemType, &bottle))
-		newNode->customer.bottles += amount;
-	else if (StringIsEqualTo(&itemType, &diaper))
-		newNode->customer.diapers += amount;
-	else if (StringIsEqualTo(&itemType, &rattle))
-		newNode->customer.rattles += amount;
 
 	return newNode;
 }
@@ -108,26 +147,17 @@ Node* isInLinkedList(Node* node, String name, String itemType, int amount) {
 
 	while (current != NULL) {
 		if (StringIsEqualTo(&(current->customer.name), &name)) {
-			if (StringIsEqualTo(&itemType, &bottle) && amount <= db.numBottles) {
-				current->customer.bottles += amount;
-				db.numBottles -= amount;
+			if (updateInventory(name, itemType, amount)) {
+				updateNode(current, name, itemType, amount);
+				return current;
 			}
-			else if (StringIsEqualTo(&itemType, &diaper) && amount <= db.numDiapers) {
-				current->customer.diapers += amount;
-				db.numDiapers -= amount;
-			}
-			else if (StringIsEqualTo(&itemType, &rattle) && amount <= db.numRattles) {
-				current->customer.rattles += amount;
-				db.numRattles -= amount;
-			}
-			return current;
 		}
 		current = current->next; 
 	}
 	return NULL;
 }
 
-char updateInventory(String itemType, int amount) {
+char updateInventory(String name, String itemType, int amount) {
 	if (StringIsEqualTo(&itemType, &bottle) && amount <= db.numBottles) {
 		db.numBottles -= amount;
 		return 1;
@@ -139,8 +169,24 @@ char updateInventory(String itemType, int amount) {
 	else if (StringIsEqualTo(&itemType, &rattle) && amount <= db.numRattles) {
 		db.numRattles -= amount;
 		return 1;
+	} else {
+		printError(name, itemType);
+		return 0;
+	}	
+
+}
+
+void updateNode(Node* node, String name, String itemType, int amount) {
+	node->customer.name = name;
+	if (StringIsEqualTo(&itemType, &bottle)) {
+		node->customer.bottles += amount;
 	}
-	return 0;
+	else if (StringIsEqualTo(&itemType, &diaper)) {
+		node->customer.diapers += amount;
+	}
+	else if (StringIsEqualTo(&itemType, &rattle)) {
+		node->customer.rattles += amount;
+	}
 }
 
 void processInventory() {
