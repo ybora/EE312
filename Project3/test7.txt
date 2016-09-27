@@ -1,0 +1,20 @@
+Inventory Diapers 100
+Purchase Bob Diapers 50
+Purchase Craig Diapers 50
+Purchase Joe Diapers 1
+
+Summm
+
+Summarize
+Quit
+
+/*Results*/
+Sorry Joe, we only have 0 Diapers
+Encountered an error in input file
+The offending line has been ignored
+There are 0 Bottles, 0 Diapers and 0 Rattles in inventory
+we have had a total of 2 different customers
+no one has purchased any Bottles
+Bob has purchased the most Diapers (50)
+no one has purchased any Rattles
+/*end*/
