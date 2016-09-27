@@ -17,6 +17,7 @@ typedef struct Node {
 
 void printLL();
 void createItems();
+void printSorry(String, String, int);
 void destroyItems();
 void insertNodeAtFront(Node*);
 char updateInventory(String, String, int);
@@ -145,15 +146,23 @@ void insertNodeAtFront(Node* node) {
 
 void printError(String name, String itemType) {
 	if (StringIsEqualTo(&itemType, &bottle)) {
-		printf("Sorry %s, we only have %d %s\n", name.ptr, db.numBottles, itemType.ptr);
+		printSorry(name, itemType, db.numBottles);
 	}
 	else if (StringIsEqualTo(&itemType, &diaper)) {
-		printf("Sorry %s, we only have %d %s\n", name.ptr, db.numDiapers, itemType.ptr);
+		printSorry(name, itemType, db.numDiapers);
 	}
 	else if (StringIsEqualTo(&itemType, &rattle)) {
-		printf("Sorry %s, we only have %d %s\n", name.ptr, db.numRattles, itemType.ptr);
+		printSorry(name, itemType, db.numRattles);
 	}
 }
+
+void printSorry(String name, String itemType, int amount) {
+	printf("Sorry ");
+	StringPrint(&name);
+	printf(", we only have %d ", amount);
+	StringPrint(&itemType);
+	printf("\n");
+}	
 
 Node* createNewNode(String name) {
 	Node* newNode = (Node *) malloc(sizeof(Node));
