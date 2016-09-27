@@ -19,15 +19,16 @@ void printLL();
 void createItems();
 void insertNodeAtFront(Node*);
 char updateInventory(String, String, int);
-void updateNode(Node*, String, String, int);
+void updateNode(Node*, String, int);
 void printError(String, String);
-Node* createNewNode();
+Node* createNewNode(String);
 Node* isInLinkedList(Node*, String, String, int);
 Node** findMaxNodes();
 
 String bottle;
 String diaper;
 String rattle;
+Node** nodes;
 
 typedef struct Database {
 	Node* root;
@@ -44,6 +45,13 @@ Database db = {NULL, 0, 0, 0, 0};
 /* clear the inventory and reset the customer database to empty */
 void reset(void) {
 	/* your code here */
+	Node* current = db.root;
+	while (current != NULL) {
+		StringDestroy(&(current->customer.name));
+		free(current);
+		current = current->next;
+	}
+	free(nodes);
 	db.root = NULL;
 	db.size = 0;
 	db.numRattles = 0;
@@ -55,7 +63,6 @@ void reset(void) {
 }
 
 void processSummarize() {
-	printLL();
 	Node** maxNodes = findMaxNodes();
 	printf("There are %d Bottles, %d Diapers, and %d Rattles in inventory\n", db.numBottles, db.numDiapers, db.numRattles);
 	printf("we have had a total of %d different customers\n", db.size);
@@ -83,7 +90,7 @@ void processSummarize() {
 }
 
 Node** findMaxNodes() {
-	Node** nodes = (Node**) malloc(3 * sizeof(Node*));
+	nodes = (Node**) malloc(3 * sizeof(Node*));
 
 	Node* current = db.root;
 	nodes[0] = current;
@@ -112,26 +119,20 @@ void processPurchase() {
 	int amount;
 	readNum(&amount);
 
-	// printf("Purchase ");
-	// printf("%s ", name.ptr);
-	// printf("%s ", itemType.ptr);
-	// printf("%d\n", amount);
 
 	Node* exists = isInLinkedList(db.root, name, itemType, amount);
 	if (!exists) {
 		if (updateInventory(name, itemType, amount)) {
-			Node* n = createNewNode();
-			updateNode(n, name, itemType, amount);
+			Node* n = createNewNode(StringDup(&name));
+			updateNode(n, itemType, amount);
 			insertNodeAtFront(n);
+		} else {
+			printError(name, itemType);
 		}
 	} 
 
-	// printf("bottles in inventory: %d\n", db.numBottles);
-	// printf("diapers in inventory: %d\n", db.numDiapers);
-	// printf("rattles in inventory: %d\n", db.numRattles);
-	// printLL();
-	// printf("------------------------------\n");
-
+	StringDestroy(&name);
+	StringDestroy(&itemType);
 }
 
 void insertNodeAtFront(Node* node) {
@@ -152,12 +153,11 @@ void printError(String name, String itemType) {
 	}
 }
 
-// TODO: add name param
-Node* createNewNode() {
+Node* createNewNode(String name) {
 	Node* newNode = (Node *) malloc(sizeof(Node));
 
 	newNode->next = NULL;
-	newNode->customer.name = StringCreate("");
+	newNode->customer.name = name;
 	newNode->customer.bottles = 0;
 	newNode->customer.diapers = 0;
 	newNode->customer.rattles = 0;
@@ -171,7 +171,7 @@ Node* isInLinkedList(Node* node, String name, String itemType, int amount) {
 	while (current != NULL) {
 		if (StringIsEqualTo(&(current->customer.name), &name)) {
 			if (updateInventory(name, itemType, amount)) {
-				updateNode(current, name, itemType, amount);
+				updateNode(current, itemType, amount);
 				return current;
 			}
 		}
@@ -193,14 +193,12 @@ char updateInventory(String name, String itemType, int amount) {
 		db.numRattles -= amount;
 		return 1;
 	} else {
-		printError(name, itemType);
 		return 0;
 	}	
 
 }
 
-void updateNode(Node* node, String name, String itemType, int amount) {
-	node->customer.name = name;
+void updateNode(Node* node, String itemType, int amount) {
 	if (StringIsEqualTo(&itemType, &bottle)) {
 		node->customer.bottles += amount;
 	}
