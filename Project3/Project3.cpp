@@ -17,6 +17,7 @@ typedef struct Node {
 
 void printLL();
 void createItems();
+void destroyItems();
 void insertNodeAtFront(Node*);
 char updateInventory(String, String, int);
 void updateNode(Node*, String, int);
@@ -57,9 +58,6 @@ void reset(void) {
 	db.numRattles = 0;
 	db.numBottles = 0;
 	db.numDiapers = 0;
-	StringDestroy(&bottle);
-	StringDestroy(&diaper);
-	StringDestroy(&rattle);
 }
 
 void processSummarize() {
@@ -133,7 +131,11 @@ void processPurchase() {
 
 	StringDestroy(&name);
 	StringDestroy(&itemType);
+
+	destroyItems();
 }
+
+
 
 void insertNodeAtFront(Node* node) {
 	node->next = db.root;
@@ -226,12 +228,20 @@ void processInventory() {
 		db.numRattles += amount;
 	}
 	StringDestroy(&itemType);
+
+	destroyItems();
 }
 
 void createItems() {
 	bottle = StringCreate("Bottles");
 	diaper = StringCreate("Diapers");
 	rattle = StringCreate("Rattles");
+}
+
+void destroyItems() {
+	StringDestroy(&bottle);
+	StringDestroy(&diaper);
+	StringDestroy(&rattle);
 }
 
 void printLL() {
