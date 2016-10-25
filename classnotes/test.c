@@ -10,9 +10,22 @@ void doit(char x[], char y[]) {
 }
 
 int main(void) {
-    char x[4] = "Hey";
-    char y[4] = "Joe";
-    doit(x, y);
-    printf("%s %s", x, y);
+    int** arrays = (int **) malloc (5 * sizeof(int*));
+    for (int k = 0; k < 5; k++) {
+        arrays[k] = (int *) malloc (5 * sizeof(int));
+    }
+
+    for (int k = 0; k < 5; k++) {
+        for (int j = 0; j < 5; j++) {
+            arrays[k][j] = 1;
+        }
+    }
+
+    for (int k = 0; k < 5; k++) {
+        for (int j = 0; j < 5; j++) {
+            printf("%d ", arrays[k][j]);
+        }
+        printf("\n");
+    }
 }
 

@@ -13,4 +13,4 @@ int main() {
     for (i = 0; i < nstr; i++) {
         puts(strings[i]);
     }
-
+}
