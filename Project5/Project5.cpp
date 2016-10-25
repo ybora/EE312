@@ -17,6 +17,7 @@
 Martian addMartians(Martian* m1, Martian* m2);
 Martian minMartian(Martian* m1, Martian* m2, Martian* m3);
 Martian changeHelper(int cents, Martian m0);
+void cleanMaze(int, int);
 int min(int, int);
 
 /* return the smallest of the elements in array x[]
@@ -234,8 +235,34 @@ int strCompare2(char* str1, char* str2) {
  */
 
 bool solveMazeRec(int row, int col) {
-	
-	return 0;
+
+	maze[row][col] = 2;
+	if (row == MATRIX_SIZE - 1) {
+		return true;
+	}
+
+	if (maze[row + 1][col] != 1 && maze[row + 1][col] != 2 && row + 1 <= MATRIX_SIZE - 1) {
+		if (solveMazeRec(row + 1, col)) {
+			return true;
+		}
+	}
+	if (maze[row - 1][col] != 1 && maze[row - 1][col] != 2 && row - 1 >= 0) {
+		if (solveMazeRec(row - 1, col)) {
+			return true;
+		}
+	} 
+	if (maze[row][col + 1] != 1 && maze[row][col + 1] != 2 && col + 1 <= MATRIX_SIZE - 1) {
+		if (solveMazeRec(row, col + 1)) {
+			return true;
+		}
+	}
+	if (maze[row][col - 1] != 1 && maze[row][col - 1] != 2 && col - 1 >= 0) {
+		if(solveMazeRec(row, col - 1)) {
+			return true;
+		}
+	} 
+	maze[row][col] = 0;
+	return false;
 }
 
 
@@ -369,53 +396,34 @@ void solveMazeIt(int row, int col) {
  * this optimal collection of coins.
  */
 Martian change(int cents) {
-	changeHelper(cents, Martian{});
-}
-
-Martian changeHelper(int cents, Martian m0) {
 	if (cents == 0) {
-		return {0, 0, 0};
-	}
-	if (cents == 12) {
-		return {0, 0, 1};
-	}
-	if (cents == 5) {
-		return {0, 1, 0};
-	}
-	if (cents == 1) {
-		return {1, 0, 0};
+		return Martian{0, 0, 0};
 	}
 	if (cents < 0) {
-		return {0x7FFFFFFF, 0x7FFFFFFF, 0x7FFFFFFF};
+		return Martian{10000, 0, 0};
 	}
-    Martian m1 = changeHelper(cents - 12, m0);
-    Martian m2 = changeHelper(cents - 5, m0);
-    Martian m3 = changeHelper(cents - 1, m0);
-    Martian x1 = addMartians(&m0, &m1);
-    Martian x2 = addMartians(&m0, &m2);
-    Martian x3 = addMartians(&m0, &m3);
+	Martian m1 = change(cents - 12);
+	m1.dodeks += 1;
+	Martian m2 = change(cents - 5);
+	m2.nicks += 1;
+	Martian m3 = change(cents - 1);
+	m3.pennies += 1;
 
-    return minMartian(&x1, &x2, &x3);
+	int oneTotal = m1.pennies + m1.nicks + m1.dodeks;
+	int twoTotal = m2.pennies + m2.nicks + m2.dodeks;
+	int threeTotal = m3.pennies + m3.nicks + m3.dodeks;
+
+	if (oneTotal <= twoTotal && oneTotal <= threeTotal) {
+		return m1;
+	} 
+	else if (twoTotal <= oneTotal && twoTotal <= threeTotal) {
+		return m2;
+	}
+	else if (threeTotal <= oneTotal && threeTotal <= twoTotal) {
+		return m3;
+	}
+
 }
-
-Martian addMartians(Martian* m1, Martian* m2) {
-	m1->pennies += m2->pennies;
-	m1->nicks += m2->nicks;
-	m1->dodeks += m2->dodeks;
-	return *m1;
-}
-
-Martian minMartian(Martian* m1, Martian* m2, Martian* m3) {
-	int m1Quantities = m1->pennies + m1->nicks + m1->dodeks;
-	int m2Quantities = m2->pennies + m2->nicks + m2->dodeks;
-	int m3Quantities = m3->pennies + m3->nicks + m3->dodeks;
-	int lol = min(m1Quantities, m2Quantities);
-	int x = min(lol, m3Quantities);
-	if (x == m1Quantities) return *m1;
-	else if (x == m2Quantities) return *m2;
-	else return *m3;
-}
-
 
 
 /*
@@ -427,7 +435,32 @@ Martian minMartian(Martian* m1, Martian* m2, Martian* m3) {
  * martian change problem is just as easy as the concrete version 
  */
 Martian change(int cents, int nick_val, int dodek_val) {
-	return Martian{}; // delete this line, it's broken. Then write the function properly!
+	if (cents == 0) {
+		return Martian{0, 0, 0};
+	}
+	if (cents < 0) {
+		return Martian{10000, 0, 0};
+	}
+	Martian m1 = change(cents - dodek_val);
+	m1.dodeks += 1;
+	Martian m2 = change(cents - nick_val);
+	m2.nicks += 1;
+	Martian m3 = change(cents - 1);
+	m3.pennies += 1;
+
+	int oneTotal = m1.pennies + m1.nicks + m1.dodeks;
+	int twoTotal = m2.pennies + m2.nicks + m2.dodeks;
+	int threeTotal = m3.pennies + m3.nicks + m3.dodeks;
+
+	if (oneTotal <= twoTotal && oneTotal <= threeTotal) {
+		return m1;
+	} 
+	else if (twoTotal <= oneTotal && twoTotal <= threeTotal) {
+		return m2;
+	}
+	else if (threeTotal <= oneTotal && threeTotal <= twoTotal) {
+		return m3;
+	}
 }
 
 /* 
