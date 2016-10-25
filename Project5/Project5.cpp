@@ -14,10 +14,6 @@
 #include "MazeParams.h"
 #include "Recursion.h"
 
-Martian addMartians(Martian* m1, Martian* m2);
-Martian minMartian(Martian* m1, Martian* m2, Martian* m3);
-Martian changeHelper(int cents, Martian m0);
-void cleanMaze(int, int);
 int min(int, int);
 
 /* return the smallest of the elements in array x[]
@@ -38,13 +34,32 @@ int minIt(int x[], int n) {
  * solve the problem recursively and 
  * use an "n-1" type of decomposition
  */
+/*
+ * [NAME] minRec1
+ * [Brief] finds the minimum of an array
+ * [Returns] int: the minimum
+ * [IN] int x[]: array to find the minimum of
+ * [IN] int n: the size of the array
+ *
+ * [Summary] Finds the minimum element in the array recursively using an n-1 decomposition
+ */
 int minRec1(int x[], int n) {
 	if (n == 1) {
 		return x[0];
 	} 
+	/* Finds the minimum of the current minimum and the previous minimum */
 	return min(x[0], minRec1(x + 1, n - 1));
 }
 
+/*
+ * [NAME] min
+ * [Brief] helper function that finds the minimum of two numbers
+ * [Returns] int: the smaller of the two numbers
+ * [IN] int a: the first number
+ * [IN] int b: the second number
+ *
+ * [Summary] Returns a if it is smaller than b and returns b otherwise
+ */
 int min(int a, int b) {
 	return a < b ? a : b;
 }
@@ -56,12 +71,27 @@ int min(int a, int b) {
  * solve the problem recursively and 
  * use an "n / 2" type of decomposition
  */
+/*
+ * [NAME] minRec2
+ * [Brief] finds the minimum of an array
+ * [Returns] int: the minimum
+ * [IN] int x[]: array to find the minimum of
+ * [IN] int n: the size of the array
+ *
+ * [Summary] Finds the minimum element in the array recursively using an n/2 decomposition
+ */
 int minRec2(int x[], int n) {
-	// if (n == 1) {
-	// 	return x[0];
-	// }
-	return n == 1 ? x[0] : min(minRec2(x, (n/2)), n % 2 == 1 ? minRec2(x + (n/2), (n/2) + 1) : minRec2(x + (n/2), (n/2)));
+	if (n == 1) {
+		return x[0];
+	} 
 
+	/* If the length of the array is odd, then the length will be 1 more because of integer division */
+	if (n % 2 == 1) {
+		/* Find the minimum of the left half of the arrya and the right half of the array */
+		return min(minRec2(x, (n/2)), minRec2(x + (n/2), (n/2) + 1)); 
+	} else {
+		return min(minRec2(x, (n/2)), minRec2(x + (n/2), (n/2)));
+	}
 }
 
 
@@ -93,12 +123,26 @@ double sqrtIt(double x, double low_guess, double high_guess) {
  * you're required to calculate the answer to 15 decimal digits of
  * accuracy.
  */
+/*
+ * [NAME] sqrtRec
+ * [Brief] finds the square root of a number
+ * [Returns] double: teh square root 
+ * [IN] double x: the number to find the square root of
+ * [IN] double low_guess: the lower limit for the square root to be
+ * [IN] double high_guess: the upper limit for the square root to be
+ *
+ * [Summary] Finds the square root of a number using a binary search
+ */
 double sqrtRec(double x, double low_guess, double high_guess) {
 	double mid_guess = (low_guess + high_guess)/2;
+
+	/* If the difference between the high guess and the low guess is negligible, you are good */
 	if (mid_guess * mid_guess == x || high_guess - low_guess <= 1e-15) {
 		return mid_guess;
+	/* If the guess is too high, make the highest possible guess equal to the mid guess */
 	} else if (mid_guess * mid_guess > x) {
 		return sqrtRec(x, low_guess, mid_guess);
+	/* If the guess is too low, make the lowest possible guess equal to the mid guess */
 	} else {
 		return sqrtRec(x, mid_guess, high_guess);
 	}
@@ -118,17 +162,31 @@ double sqrtRec(double x, double low_guess, double high_guess) {
  *   for all j < k str1[j] == str2[j]
  *   and k is less than the length of str1 and str2
  */
-
+/*
+ * [NAME] strCompare
+ * [Brief] compares two strings and returns which is greater
+ * [Returns] int: 1, 0, or -1, depending on which string is greater
+ * [IN] char* str1: the first string
+ * [IN] char* str2: the second string
+ *
+ * [Summary] Compares two strings case sensitively to see which one is greater. Returns -1 if the 
+ * first argument is less than the second. Returns 1 if the first argument is greater than the second.
+ * Returns 0 if the strings are exactly the same.
+ */
 int strCompare(char* str1, char* str2) {
+	/* Found null for both strings */
 	if (str1[0] == str2[0] && str1[0] == 0) {
 		return 0;
 	}
+	/* Equal character but not null */
 	else if (str1[0] == str2[0]) {
 		return strCompare(str1 + 1, str2 + 1);
 	}
+	/* current letter of str1 is less than current letter of str2 OR you get to the end of str1 */
 	else if (str1[0] < str2[0] || str1[0] == 0) {
 		return -1;
 	}
+	/* current letter of str1 is greater than current letter of str2 OR you get to the end of str2 */
 	else if (str1[0] > str2[0] || str2[0] == 0) {
 		return 1;
 	}
@@ -156,13 +214,26 @@ int whatLetter(char c) {
  * strCompare2("The plane!", "theater") should return 1 since "theplane" is larger than "theater"
  * once again, you can only use recursion, no loops
  */
+/*
+ * [NAME] strCompare2
+ * [Brief] compares two strings and returns which is greater
+ * [Returns] int: 1, 0, or -1, depending on which string is greater
+ * [IN] char* str1: the first string
+ * [IN] char* str2: the second string
+ *
+ * [Summary] Compares two strings ignoring case and punctuation present in the string. Returns -1 if the 
+ * first argument is less than the second. Returns 1 if the first argument is greater than the second.
+ * Returns 0 if the strings are the same, disregarding punctuation and case of the letter.
+ */
 int strCompare2(char* str1, char* str2) {
 	if (str1[0] == 0 && str2[0] == 0) {
 		return 0;
 	}  
+	/* Reached an invalid character in str1 */
 	else if (whatLetter(str1[0]) == -1 && (whatLetter(str2[0]) != -1 || str2[0] == 0)) {
 		return strCompare2(str1 + 1, str2);
 	} 
+	/* Reach an invalid character in str2 */
 	else if (whatLetter(str2[0]) == -1 && (whatLetter(str1[0]) != -1 || str1[0] == 0)) {
 		return strCompare2(str1, str2 + 1);
 	} 
@@ -233,14 +304,27 @@ int strCompare2(char* str1, char* str2) {
  * for full credit, you must pick up all the bread crumbs EXCEPT those
  * along a path to the exit.
  */
+/*
+ * [NAME] solveMazeRec
+ * [Brief] finds a path through the maze
+ * [Returns] int: 1 (true) or 0 (false) depending on whether or not there is a solution ot the maze
+ * [IN] int row: the row at which to start
+ * [IN] int col: the column at which to start
+ *
+ * [Summary] Recursively traverses a maze to find a solution to the maze. In the end, the function marks a 
+ * path as visited if it is part of the path.
+ */
+int solveMazeRec(int row, int col) {
 
-bool solveMazeRec(int row, int col) {
-
+	/* Mark the cell as visited */
 	maze[row][col] = 2;
+
+	/* Reached the end! */
 	if (row == MATRIX_SIZE - 1) {
 		return true;
 	}
 
+	/* Check all 4 directions if any is open */
 	if (maze[row + 1][col] != 1 && maze[row + 1][col] != 2 && row + 1 <= MATRIX_SIZE - 1) {
 		if (solveMazeRec(row + 1, col)) {
 			return true;
@@ -261,6 +345,9 @@ bool solveMazeRec(int row, int col) {
 			return true;
 		}
 	} 
+
+	/* If none of the directions are open, then clear away the bread crumb because you're at a dead end */
+	/* and return false. */
 	maze[row][col] = 0;
 	return false;
 }
@@ -395,6 +482,16 @@ void solveMazeIt(int row, int col) {
  * (fewest total coins) change for a given amount of money. Return a Martian struct that indicates
  * this optimal collection of coins.
  */
+/*
+ * [NAME] change
+ * [Brief] finds the number of each denomination of coin to make change for some cents value
+ * [Returns] Martian: a struct containing information about how many coins are needed
+ * [IN] int cents: the number of cents for which to find the breakdown
+ *
+ * [Summary] Returns the minimum number of coins needed to make change with the given "cents" value
+ * assuming coins worth 12 cents, 5 cents, and 1 cent. The returned struct's pennies, nicks, and dodek
+ * fields contain the amount of coins needed. 
+ */
 Martian change(int cents) {
 	if (cents == 0) {
 		return Martian{0, 0, 0};
@@ -402,27 +499,31 @@ Martian change(int cents) {
 	if (cents < 0) {
 		return Martian{10000, 0, 0};
 	}
+
 	Martian m1 = change(cents - 12);
+	/* Now you know you need at least one more dodek */
 	m1.dodeks += 1;
 	Martian m2 = change(cents - 5);
+	/* Now you know you need at least one more nick */
 	m2.nicks += 1;
 	Martian m3 = change(cents - 1);
+	/* Now you know you need at least one more penny */
 	m3.pennies += 1;
 
-	int oneTotal = m1.pennies + m1.nicks + m1.dodeks;
-	int twoTotal = m2.pennies + m2.nicks + m2.dodeks;
-	int threeTotal = m3.pennies + m3.nicks + m3.dodeks;
+	/* Finds the minimum of the three martians */
+	int one = m1.pennies + m1.nicks + m1.dodeks;
+	int two = m2.pennies + m2.nicks + m2.dodeks;
+	int three = m3.pennies + m3.nicks + m3.dodeks;
 
-	if (oneTotal <= twoTotal && oneTotal <= threeTotal) {
+	if (one <= two && one <= three) {
 		return m1;
 	} 
-	else if (twoTotal <= oneTotal && twoTotal <= threeTotal) {
+	else if (two <= one && two <= three) {
 		return m2;
 	}
-	else if (threeTotal <= oneTotal && threeTotal <= twoTotal) {
+	else if (three <= one && three <= two) {
 		return m3;
 	}
-
 }
 
 
@@ -434,6 +535,18 @@ Martian change(int cents) {
  * If you've really mastered thinking recursively, then this version of the 
  * martian change problem is just as easy as the concrete version 
  */
+/*
+ * [NAME] change
+ * [Brief] finds the number of each denomination of coin to make change for some cents value
+ * [Returns] Martian: a struct containing information about how many coins are needed
+ * [IN] int cents: the number of cents for which to find the breakdown
+ * [IN] int nick_val: the value of the nickel coin
+ * [IN] int dodke_val: the value of the dodek coin
+ *
+ * [Summary] Returns the minimum number of coins needed to make change with the given "cents" value
+ * assuming coins with the two given nick and dodek values and 1 cent for the penny.
+ * The returned struct's pennies, nicks, and dodek fields contain the amount of coins needed to make change.
+ */
 Martian change(int cents, int nick_val, int dodek_val) {
 	if (cents == 0) {
 		return Martian{0, 0, 0};
@@ -441,6 +554,8 @@ Martian change(int cents, int nick_val, int dodek_val) {
 	if (cents < 0) {
 		return Martian{10000, 0, 0};
 	}
+
+	/* Same as the other one, except generalized dodek and nick val */
 	Martian m1 = change(cents - dodek_val);
 	m1.dodeks += 1;
 	Martian m2 = change(cents - nick_val);

@@ -10,7 +10,7 @@ double sqrtIt(double, double, double);
 double sqrtRec(double, double, double);
 int strCompare(char*, char*);
 int strCompare2(char*, char*);
-bool solveMazeRec(int, int);
+int solveMazeRec(int, int);
 void solveMazeIt(int, int);
 
 
