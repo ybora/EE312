@@ -1,0 +1,15 @@
+Inventory Bottles 0
+Inventory Rattles 0
+Inventory Diapers 0
+
+Purchase Craig Bottles 0
+
+Summarize
+Quit
+/** test5 Results should be: **/
+There are 0 Bottles, 0 Diapers and 0 Rattles in inventory
+we have had a total of 0 different customers
+no one has purchased any Bottles
+no one has purchased any Diapers
+no one has purchased any Rattles
+/********* end of test 5 *************/

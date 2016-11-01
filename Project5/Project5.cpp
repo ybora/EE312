@@ -1,9 +1,7 @@
 /*
  * Project5.c
  *
- * My Name
- * My TA
- * My Section Time
+ * Nav Saini
  *
  *
  */
@@ -556,24 +554,24 @@ Martian change(int cents, int nick_val, int dodek_val) {
 	}
 
 	/* Same as the other one, except generalized dodek and nick val */
-	Martian m1 = change(cents - dodek_val);
+	Martian m1 = change(cents - dodek_val, nick_val, dodek_val);
 	m1.dodeks += 1;
-	Martian m2 = change(cents - nick_val);
+	Martian m2 = change(cents - nick_val, nick_val, dodek_val);
 	m2.nicks += 1;
-	Martian m3 = change(cents - 1);
+	Martian m3 = change(cents - 1, nick_val, dodek_val);
 	m3.pennies += 1;
 
-	int oneTotal = m1.pennies + m1.nicks + m1.dodeks;
-	int twoTotal = m2.pennies + m2.nicks + m2.dodeks;
-	int threeTotal = m3.pennies + m3.nicks + m3.dodeks;
+	int one = m1.pennies + m1.nicks + m1.dodeks;
+	int two = m2.pennies + m2.nicks + m2.dodeks;
+	int three = m3.pennies + m3.nicks + m3.dodeks;
 
-	if (oneTotal <= twoTotal && oneTotal <= threeTotal) {
+	if (one <= two && one <= three) {
 		return m1;
 	} 
-	else if (twoTotal <= oneTotal && twoTotal <= threeTotal) {
+	else if (two <= one && two <= three) {
 		return m2;
 	}
-	else if (threeTotal <= oneTotal && threeTotal <= twoTotal) {
+	else if (three <= one && three <= two) {
 		return m3;
 	}
 }

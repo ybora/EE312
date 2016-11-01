@@ -348,6 +348,9 @@ int main(void) {
 	printf("change 4 should be 2d, 0n, 1p and is: %dd %dn %dp\n", change4.dodeks, change4.nicks, change4.pennies);
 
 
+	Martian change5 = change(30, 2, 15);
+	printf("change 5 should be 2d, 0n, 1p and is: %dd %dn %dp\n", change5.dodeks, change5.nicks, change5.pennies);
+
 	/* A very simple and obvious test of the general form of Martian
 	 * be sure and test your solution more thoroughly!!!! */
 	change4 = change(25, 5, 12);
