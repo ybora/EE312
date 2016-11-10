@@ -46,7 +46,7 @@ private:
 	// Find the location of the element in the set
 	// return true if element is in set and update n with this location
 	// return false if element is not in set, and update n with the location greater than this element
-	bool is_element(const T& x, Node*& n); //Note: the second argument is read as n is a reference to a Node pointer
+	bool is_element(const T& x, Node*& n) const; //Note: the second argument is read as n is a reference to a Node pointer
 										   // This allows me to update the Node pointer in the function
 
 	// Private Variables
@@ -59,8 +59,10 @@ private:
     int length;
     
     //Convenience functions
-    Node* Head(void){ return head->next; }
+    Node* Head(void) const { return head->next; }
     Node* Tail(void){ return tail->prev; }
+
+    const LinkedListSet<T>& copy(const LinkedListSet<T>& that);
 
 public:
     
@@ -95,6 +97,14 @@ public:
     // Done for you
 	int size(void) { return length; }
 
+	LinkedListSet(const LinkedListSet<T>& that) { copy(that); } 
+	const LinkedListSet<T>& operator=(const LinkedListSet<T>& that) { return copy(that); }
+
+	template <typename U> 
+	friend LinkedListSet<U> setUnion(const LinkedListSet<U>& A, const LinkedListSet<U>& B); 
+	template <typename U>
+	friend LinkedListSet<U> intersect(const LinkedListSet<U>& A, const LinkedListSet<U>& B);
+
 };
 //====================BEGIN WRITING CODE========================================
 // Please complete the following functions
@@ -116,6 +126,7 @@ LinkedListSet<T>::LinkedListSet(void){
 	head->next = tail;
 	tail->prev = head;
 
+	this->length = 0;
     return;
 } //End Destructor
 //================= Destructor ==============
@@ -148,7 +159,7 @@ LinkedListSet<T>::~LinkedListSet(void) {
 //note: if x < n->data then no element is found
 //hint: n can be used to quickly determine the insert point in the set.
 template <typename T>
-bool LinkedListSet<T>::is_element(const T& x, Node*& n){
+bool LinkedListSet<T>::is_element(const T& x, Node*& n) const {
     if (n == nullptr) {
         n = head->next;
     }
@@ -229,6 +240,74 @@ void LinkedListSet<T>::print_elements(void){
 	}
 	std::cout << std::endl;
 	return;
+}
+
+template <typename T>
+const LinkedListSet<T>& LinkedListSet<T>::copy(const LinkedListSet<T>& that) {
+	using Node = typename LinkedListSet<T>::Node;
+
+	Node* cursor = this->head->next;
+
+	while (this->length > 0) {
+		using namespace std;
+		cout << cursor->data << endl;
+		this->remove_element(cursor->data);
+		cursor = cursor->next;
+	}
+
+	cursor = that.head->next;
+	while (!cursor->end()) {
+		this->insert_element(cursor->data);
+		cursor = cursor->next;
+	}
+
+	return (*this);
+}
+
+template <typename T>
+LinkedListSet<T> setUnion(const LinkedListSet<T>& A, const LinkedListSet<T>& B) {
+	LinkedListSet<T> combined = LinkedListSet<T>();
+
+	typedef typename LinkedListSet<T>::Node Node;
+
+	Node* nodeA = A.head->next;
+	Node* nodeB = B.head->next;
+
+	while (!nodeA->end()) {
+		combined.insert_element(nodeA->data);
+		nodeA = nodeA->next;
+	}
+
+	while (!nodeB->end()) {
+		combined.insert_element(nodeB->data);
+		nodeB = nodeB->next;
+	}
+
+	return combined;
+}
+
+template <typename T>
+LinkedListSet<T> intersect(const LinkedListSet<T>& A, const LinkedListSet<T>& B) {
+
+	LinkedListSet<T> intersected = LinkedListSet<T>();
+
+	typedef typename LinkedListSet<T>::Node Node;
+
+	Node* nodeA = A.head->next;
+	Node* nodeB = B.head->next;
+
+	while (!nodeA->end() && !nodeB->end()) {
+		if (nodeA->data == nodeB->data) {
+			intersected.insert_element(nodeA->data);
+			nodeA = nodeA->next;
+			nodeB = nodeB->next;
+		} else if (nodeA->data < nodeB->data) {
+			nodeA = nodeA->next;
+		} else {
+			nodeB = nodeB->next;
+		}
+	}
+	return intersected;
 }
 
 

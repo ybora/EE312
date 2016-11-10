@@ -90,6 +90,14 @@ Customer* findMax(String type) {
 	return result;
 }
 
+/*
+ * [NAME] processPurchase
+ * [Brief] processes a purchase 
+ * [Returns] void
+ * [IN] void
+ *
+ * [Summary] Processes a purchase by checking its validity and updating the inventory and customer db
+ */
 void processPurchase() {
 	String name;
 	readString(name);
@@ -98,7 +106,6 @@ void processPurchase() {
 	int amount;
 	readNum(amount);
 
-	//assert(amount >= 0);
 	if (amount > 0) {
 		if (amount <= *selectInventItem(itemType)) {
 			Customer cust = database[name];
@@ -113,9 +120,18 @@ void processPurchase() {
 	}
 }
 
+/*
+ * [NAME] processSummarize
+ * [Brief] processes the word "Summarize" in the input file
+ * [Returns] void
+ * [IN] void
+ *
+ * [Summary] Prints the number of each item available in the inventory, prints the size of the database (the number of valid customers),
+ *  and prints the name, buyer, and quantity of the each of the most purchased item
+ */
 void processSummarize() {
 	cout << "There are " << num_bottles << " Bottles, " << num_diapers << " Diapers and " << num_rattles << " Rattles in inventory" << endl;
-	cout << "We have had a total of " << database.length << " different customers" << endl;
+	cout << "we have had a total of " << database.length << " different customers" << endl;
 
 	Customer* maxBottles = findMax(String("Bottles"));
 	Customer* maxDiapers = findMax(String("Diapers"));
@@ -141,12 +157,19 @@ void processSummarize() {
 
 }
 
+/*
+ * [NAME] processInventory
+ * [Brief] process an inventory update
+ * [Returns] void
+ * [IN] void
+ *
+ * [Summary] Increase the amount of items in each part of the inventory (bottles, diapers, rattles)
+ */
 void processInventory() {
 	String itemType;
 	readString(itemType);
 	int amount;
 	readNum(amount);
 
-	//assert(amount >= 0);
 	*(selectInventItem(itemType)) += amount;
 }
