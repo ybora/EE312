@@ -249,8 +249,6 @@ const LinkedListSet<T>& LinkedListSet<T>::copy(const LinkedListSet<T>& that) {
 	Node* cursor = this->head->next;
 
 	while (this->length > 0) {
-		using namespace std;
-		cout << cursor->data << endl;
 		this->remove_element(cursor->data);
 		cursor = cursor->next;
 	}
