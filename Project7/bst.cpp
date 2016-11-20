@@ -29,6 +29,14 @@ class BinarySearchTree {
 		root = nullptr;
 	}
 
+	~BinarySearchTree() {
+
+	}
+
+	void deleteHelper(Node* current) {
+		delete current;
+	}
+
 	void insert(T data, Node*& current) {
 		if (current == nullptr) {
 			current = new Node(data);
@@ -65,18 +73,18 @@ class BinarySearchTree {
 
 };
 
-int main() {
-	BinarySearchTree<int> bst = BinarySearchTree<int>();
-	bst.insert(4, bst.root);
-	bst.insert(2, bst.root);
-	bst.insert(6, bst.root);
-	bst.insert(1, bst.root);
-	bst.insert(3, bst.root);
-	bst.insert(-1, bst.root);
-	if (bst.search(2, bst.root) != NULL)
-		cout << bst.search(2, bst.root)->data << endl;
-	cout << bst.height(bst.root) << endl;
-}
+// int main() {
+// 	BinarySearchTree<int> bst = BinarySearchTree<int>();
+// 	bst.insert(4, bst.root);
+// 	bst.insert(2, bst.root);
+// 	bst.insert(6, bst.root);
+// 	bst.insert(1, bst.root);
+// 	bst.insert(3, bst.root);
+// 	bst.insert(-1, bst.root);
+// 	if (bst.search(2, bst.root) != NULL)
+// 		cout << bst.search(2, bst.root)->data << endl;
+// 	cout << bst.height(bst.root) << endl;
+// }
 
 
 

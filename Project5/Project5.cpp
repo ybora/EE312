@@ -491,6 +491,7 @@ void solveMazeIt(int row, int col) {
  * fields contain the amount of coins needed. 
  */
 Martian change(int cents) {
+	printf("%d\n", cents);
 	if (cents == 0) {
 		return Martian{0, 0, 0};
 	}
@@ -500,12 +501,15 @@ Martian change(int cents) {
 
 	Martian m1 = change(cents - 12);
 	/* Now you know you need at least one more dodek */
+	printf("dods: %d nicks: %d pennies: %d\n", m1.dodeks, m1.nicks, m1.pennies);
 	m1.dodeks += 1;
 	Martian m2 = change(cents - 5);
 	/* Now you know you need at least one more nick */
+	printf("dods: %d nicks: %d pennies: %d\n", m2.dodeks, m2.nicks, m2.pennies);
 	m2.nicks += 1;
 	Martian m3 = change(cents - 1);
 	/* Now you know you need at least one more penny */
+	printf("dods: %d nicks: %d pennies: %d\n", m3.dodeks, m3.nicks, m3.pennies);
 	m3.pennies += 1;
 
 	/* Finds the minimum of the three martians */

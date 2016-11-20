@@ -90,20 +90,26 @@ void processSummarize(void) {
 	/* Iterate through the maxNodes array to get max values for bottles, diapers, and rattles */
 	for (int k = 0; k < 3; k++) {
 		if (k == BOTTLE) {
-			if (maxNodes[k] != NULL && maxNodes[k]->customer.bottles != 0)
-				printf("%s has purchased the most Bottles (%d)\n", maxNodes[k]->customer.name.ptr, maxNodes[k]->customer.bottles);
+			if (maxNodes[k] != NULL && maxNodes[k]->customer.bottles != 0) {
+				StringPrint(&maxNodes[k]->customer.name);
+				printf(" has purchased the most Bottles (%d)\n", maxNodes[k]->customer.bottles);
+			}
 			else 
 				printf("no one has purchased any Bottles\n");
 		}
 		if (k == DIAPER) {
-			if (maxNodes[k] != NULL && maxNodes[k]->customer.diapers != 0)
-				printf("%s has purchased the most Diapers (%d)\n", maxNodes[k]->customer.name.ptr, maxNodes[k]->customer.diapers);
+			if (maxNodes[k] != NULL && maxNodes[k]->customer.diapers != 0) {
+				StringPrint(&maxNodes[k]->customer.name);
+				printf(" has purchased the most Diapers (%d)\n", maxNodes[k]->customer.diapers);
+			}
 			else
 				printf("no one has purchased any Diapers\n");
 		}
 		if (k == RATTLE) {
-			if (maxNodes[k] != NULL && maxNodes[k]->customer.rattles != 0)
-				printf("%s has purchased the most Rattles (%d)\n", maxNodes[k]->customer.name.ptr, maxNodes[k]->customer.rattles);
+			if (maxNodes[k] != NULL && maxNodes[k]->customer.rattles != 0) {
+				StringPrint(&maxNodes[k]->customer.name);
+				printf(" has purchased the most Rattles (%d)\n", maxNodes[k]->customer.rattles);
+			}
 			else
 				printf("no one has purchased any Rattles\n");
 		}

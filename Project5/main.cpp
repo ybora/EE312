@@ -335,14 +335,14 @@ int main(void) {
 
 
 	/* test Martian */
-	Martian change1 = change(15);
-	printf("change 1 should be 0d, 3n, 0p and is: %dd %dn %dp\n", change1.dodeks, change1.nicks, change1.pennies);
+	// Martian change1 = change(15);
+	// printf("change 1 should be 0d, 3n, 0p and is: %dd %dn %dp\n", change1.dodeks, change1.nicks, change1.pennies);
 
-	Martian change2 = change(0);
-	printf("change 2 should be 0d, 0n, 0p and is: %dd %dn %dp\n", change2.dodeks, change2.nicks, change2.pennies);
+	// Martian change2 = change(0);
+	// printf("change 2 should be 0d, 0n, 0p and is: %dd %dn %dp\n", change2.dodeks, change2.nicks, change2.pennies);
 
-	Martian change3 = change(17);
-	printf("change 3 should be 1d, 1n, 0p and is: %dd %dn %dp\n", change3.dodeks, change3.nicks, change3.pennies);
+	// Martian change3 = change(17);
+	// printf("change 3 should be 1d, 1n, 0p and is: %dd %dn %dp\n", change3.dodeks, change3.nicks, change3.pennies);
 
 	Martian change4 = change(25);
 	printf("change 4 should be 2d, 0n, 1p and is: %dd %dn %dp\n", change4.dodeks, change4.nicks, change4.pennies);

@@ -1,0 +1,10 @@
+
+
+First = first word in expression
+if (First is not an operator)
+    return First;
+else First is an operator, so ...
+Remove first from expression
+int arg1 = call parse(expression)
+int arg2 = call parse(expression)
+return result of operation First on arguments arg1 and arg2
