@@ -16,17 +16,18 @@ map<String, int> variables;
 // operate on the two operands
 int operate(String op, int arg1, int arg2) {
 	if (op == "+") { return arg1 + arg2; }
-	if (op == "-") { return arg1 - arg2; }
-	if (op == "*") { return arg1 * arg2; }
-	if (op == "/") { return arg1 / arg2; }
-	if (op == "&&") { if (arg1 == 0 || arg2 == 0) return 0; return 1; }
-	if (op == "||") { if (arg1 != 0 || arg2 != 0) return 1; return 0; }
-	if (op == "<") { return arg1 < arg2; }
-	if (op == ">") { return arg1 > arg2; }
-	if (op == "<=") { return arg1 <= arg2; }
-	if (op == ">=") { return arg1 >= arg2; }
-	if (op == "==") { return arg1 == arg2; }
-	if (op == "!=") { return arg1 != arg2; }
+	else if (op == "-") { return arg1 - arg2; }
+	else if (op == "*") { return arg1 * arg2; }
+	else if (op == "/") { return arg1 / arg2; }
+	else if (op == "%") { return arg1 % arg2; }
+	else if (op == "&&") { if (arg1 == 0 || arg2 == 0) return 0; return 1; }
+	else if (op == "||") { if (arg1 != 0 || arg2 != 0) return 1; return 0; }
+	else if (op == "<") { return arg1 < arg2; }
+	else if (op == ">") { return arg1 > arg2; }
+	else if (op == "<=") { return arg1 <= arg2; }
+	else if (op == ">=") { return arg1 >= arg2; }
+	else if (op == "==") { return arg1 == arg2; }
+	else if (op == "!=") { return arg1 != arg2; }
 	exit(1);
 }
 
@@ -99,7 +100,8 @@ void processText() {
 	read_next_token();
 	cout << next_token();
 	checkForComment();
-
+	read_next_token();
+	checkForComment();
 }
 
 int continueReading() {
@@ -121,17 +123,6 @@ void processSet() {
 	read_next_token();
 	String varName = String(next_token());
 	int result = continueReading();
-	// vector<String> expression;
-	// read_next_token();
-	// while (!isCommand(next_token())) {
-	// 	if (String(next_token()) == String("//")) {
-	// 		skip_line();
-	// 	}
-	// 	expression.push_back(next_token());
-	// 	read_next_token();
-	// }
-
-	// int result = parse(expression);
 
 	if (!variables.count(varName)) {
 		cout << "variable declared even though it wasn't there before" << endl;
@@ -144,17 +135,6 @@ void processVar() {
 	read_next_token();
 	String varName = String(next_token());
 	int result = continueReading();
-	// vector<String> expression;
-	// read_next_token();
-	// while (!isCommand(next_token())) {
-	// 	if (String(next_token()) == String("//")) {
-	// 		skip_line();
-	// 	}
-	// 	expression.push_back(next_token());
-	// 	read_next_token();
-	// }
-
-	// int result = parse(expression);
 
 	if (variables.count(varName)) {
 		cout << "variable correctly re-initialized" << endl;
@@ -171,16 +151,6 @@ void printVector(vector<String> v) {
 
 void processOutput() {
 	int result = continueReading();
-	// vector<String> expression;
-	// read_next_token();
-	// while (!isCommand(next_token())) {
-	// 	if (String(next_token()) == String("//")) {
-	// 		skip_line();
-	// 	}
-	// 	expression.push_back(next_token());
-	// 	read_next_token();
-	// }
-	// int result = parse(expression);
 	cout << result;
 }
 
@@ -199,8 +169,6 @@ void parseFile() {
 			}
 			if (currentToken == text) {
 				processText();
-				read_next_token();
-				checkForComment();
 			}
 			if (currentToken == output) {
 				processOutput();
@@ -213,6 +181,6 @@ void parseFile() {
 }
 
 int main() {
-	set_input("test4.blip");
+	set_input("test1.blip");
 	parseFile();
 }

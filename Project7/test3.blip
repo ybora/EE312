@@ -1,6 +1,6 @@
 text "output 42 -- " 
 output 42 // prints 42
-text \n
+text \n 
 
 text "output + 42 42 -- "
 output + 42 42 // prints 84

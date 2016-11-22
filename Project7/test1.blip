@@ -1,5 +1,15 @@
-text "Hello World\n"
-text "the answer is "
-output 42
-text \n
+var x 30
 
+text "setting x to x * 3: "
+set x * x 3
+output x
+text \n
+set y + 3 4
+output y
+text \n
+text "((90 % 7) / (7 + (-1))) && !((7 + 0) - ((90 / 90) * 7)) === ??? "
+output && / % x y + 7 ~ 1 ! - + y 0 * / x 90 y
+// (6 / 6) && ! ((y + 0) - ((x/90) * 7)) = 1 && !0
+text \n
+text "End Ryan's test"
+text \n
