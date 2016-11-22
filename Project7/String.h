@@ -75,7 +75,6 @@ public:
 		return answer;
 	}
 
-
 	bool operator!=(String s2) const { const String& s1 = *this; return !(s1 == s2); }
 	bool operator>(String s2) const { const String& s1 = *this; return s2 < s1; }
 	bool operator<=(String s2) const { const String& s1 = *this; return ! (s2 < s1); }

@@ -1,0 +1,46 @@
+var x 2
+var y 3
+var z 4
+
+text "length x = "
+output x
+text \n
+text "should be 2\n\n"
+
+text "height y"
+text " = "
+output y text \n
+text "should be 3\n\n"
+
+text "width z = " output z text "\n"
+text "should be 4\n\n"
+
+text volume
+text " = "
+output * * x y z
+text "\nshould be 24\n\n"
+
+set x 5 text "x = " output x text \n
+text "should be 5, no warning message\n\n"
+
+// text "\nif you see this, you messed up. #1\n\n"
+
+var y 6 text "y = " output y text \n // text "\nif you see this, you messed up. #2\n\n"
+text "should be 6, incorrect re-init message\n\n"
+
+set w 7 text "w = " output w text \n
+text "should be 7, var not declared message\n\n"
+
+text "x^3 = " output * x * x x
+text "\nshould be 125\n\n"
+
+text "w + x + y = " output + + w x y // text "\nif you see this, you messed up. #3\n\n"
+text "\nshould be 18\n\n"
+
+text "y / (w + -x) = " output / y + w ~ x
+text "\nshould be 3\n\n"
+
+var v / y + w ~ x text "v = " output v
+text "\nshould be 3\n\n"
+output + + + 3 - 7 * 2 + + 8 7 6 6 6
+text " is -20\n"

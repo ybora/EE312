@@ -60,18 +60,13 @@ int parse(vector<String>& expr) {
 	if (variables.count(first)) return variables[first];
 
 	if (isUnaryOperator(first)) {
-		String temp = expr[0];
-		expr.erase(expr.begin());
+		int temp = parse(expr);
 
 		if (first == String("~")) {
-			if (variables.count(temp)) return -variables[temp];
-			return -String::stoi(temp);
+			return -temp;
 		}
 		else {
-			if (variables.count(temp)) {
-				return variables[temp] == 0 ? 1 : 0;
-			}
-			return temp == String("0") ? 1 : 0;
+			return temp == 0 ? 1 : 0;
 		}
 	}
 
@@ -125,7 +120,7 @@ void processSet() {
 	int result = continueReading();
 
 	if (!variables.count(varName)) {
-		cout << "variable declared even though it wasn't there before" << endl;
+		cout << "variable " << varName.c_str() << " not declared" << endl;
 	}
 
 	variables[varName] = result;
@@ -137,7 +132,7 @@ void processVar() {
 	int result = continueReading();
 
 	if (variables.count(varName)) {
-		cout << "variable correctly re-initialized" << endl;
+		cout << "variable incorrectly re-initialized" << endl;
 	}
 
 	variables[varName] = result;
@@ -153,7 +148,6 @@ void processOutput() {
 	int result = continueReading();
 	cout << result;
 }
-
 
 void parseFile() {
 	read_next_token();
@@ -174,13 +168,9 @@ void parseFile() {
 				processOutput();
 			}
 		}
-		if (next_token_type == END)
-			return;
-		
 	}
 }
 
-int main() {
-	set_input("test1.blip");
+void run() {
 	parseFile();
 }
