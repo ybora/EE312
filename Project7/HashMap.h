@@ -2,10 +2,6 @@
 #include "LinkedListSet.h"
 #include "String.h"
 
-#define A 54059 /* a prime */
-#define B 76963 /* another prime */
-#define START 37 /* also prime */
-
 using namespace std;
 
 namespace std {
@@ -13,19 +9,18 @@ namespace std {
 	struct hash<String> {
 		public:
 			int operator() (const String& s) const {
-				int h = START;
 				const char* str = s.c_str();
 
-			    while (*str) {
-			      h = (h * A) ^ (str[0] * B);
-			      str++;
-			    }
-			    return h; 
+				if (s.len == 0)
+					return 0;
+				if (s.len == 1) 
+					return str[0] - 'a';
+				return (str[0] - 'a' + 1) * (str[1] - 'a' + 1);
 			}
 	};
 }
 
-#define TABLE_SIZE 128
+#define TABLE_SIZE 676
 
 template <typename K, typename V> 
 class HashMap {
@@ -35,8 +30,8 @@ class HashMap {
 			V value;
 
 			HashEntry() {
-				key = NULL;
-				value = NULL;
+				key = K();
+				value = V();
 			}
 
 			HashEntry(K key, V value) {
@@ -63,7 +58,7 @@ class HashMap {
 			table = new LinkedListSet<HashEntry>* [TABLE_SIZE];
 
 			for (int k = 0; k < TABLE_SIZE; k++) {
-				table[k] = new LinkedListSet<HashEntry>();
+				table[k] = NULL;
 			}
 		}
 
@@ -89,12 +84,3 @@ class HashMap {
 			return NULL;
 		}
 };
-
-
-
-
-
-
-
-
-

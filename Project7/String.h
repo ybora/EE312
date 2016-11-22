@@ -64,6 +64,17 @@ public:
 		return s1.ptr[k] < s2.ptr[k];
 	}
 
+	static int stoi(String s) {
+		int count = 1;
+		int answer = 0;
+
+		for (int k = s.len - 1; k >= 0; k--, count *= 10) {
+			answer += count * (s.ptr[k] - '0');
+		}
+
+		return answer;
+	}
+
 
 	bool operator!=(String s2) const { const String& s1 = *this; return !(s1 == s2); }
 	bool operator>(String s2) const { const String& s1 = *this; return s2 < s1; }

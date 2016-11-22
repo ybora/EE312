@@ -1,1 +1,1 @@
-Project7.o: Project7.cpp HashMap.h LinkedListSet.h String.h
+Project7.o: Project7.cpp String.h Parse.h
