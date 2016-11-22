@@ -66,8 +66,12 @@ int parse(vector<String>& expr) {
 			if (variables.count(temp)) return -variables[temp];
 			return -String::stoi(temp);
 		}
-		else 
+		else {
+			if (variables.count(temp)) {
+				return variables[temp] == 0 ? 1 : 0;
+			}
 			return temp == String("0") ? 1 : 0;
+		}
 	}
 
 	if (!isBinaryOperator(first)) {
@@ -98,10 +102,7 @@ void processText() {
 
 }
 
-void processSet() {
-	read_next_token();
-	String varName = String(next_token());
-
+int continueReading() {
 	vector<String> expression;
 	read_next_token();
 	while (!isCommand(next_token())) {
@@ -113,6 +114,24 @@ void processSet() {
 	}
 
 	int result = parse(expression);
+	return result;
+}
+
+void processSet() {
+	read_next_token();
+	String varName = String(next_token());
+	int result = continueReading();
+	// vector<String> expression;
+	// read_next_token();
+	// while (!isCommand(next_token())) {
+	// 	if (String(next_token()) == String("//")) {
+	// 		skip_line();
+	// 	}
+	// 	expression.push_back(next_token());
+	// 	read_next_token();
+	// }
+
+	// int result = parse(expression);
 
 	if (!variables.count(varName)) {
 		cout << "variable declared even though it wasn't there before" << endl;
@@ -124,17 +143,18 @@ void processSet() {
 void processVar() {
 	read_next_token();
 	String varName = String(next_token());
-	vector<String> expression;
-	read_next_token();
-	while (!isCommand(next_token())) {
-		if (String(next_token()) == String("//")) {
-			skip_line();
-		}
-		expression.push_back(next_token());
-		read_next_token();
-	}
+	int result = continueReading();
+	// vector<String> expression;
+	// read_next_token();
+	// while (!isCommand(next_token())) {
+	// 	if (String(next_token()) == String("//")) {
+	// 		skip_line();
+	// 	}
+	// 	expression.push_back(next_token());
+	// 	read_next_token();
+	// }
 
-	int result = parse(expression);
+	// int result = parse(expression);
 
 	if (variables.count(varName)) {
 		cout << "variable correctly re-initialized" << endl;
@@ -150,16 +170,17 @@ void printVector(vector<String> v) {
 }
 
 void processOutput() {
-	vector<String> expression;
-	read_next_token();
-	while (!isCommand(next_token())) {
-		if (String(next_token()) == String("//")) {
-			skip_line();
-		}
-		expression.push_back(next_token());
-		read_next_token();
-	}
-	int result = parse(expression);
+	int result = continueReading();
+	// vector<String> expression;
+	// read_next_token();
+	// while (!isCommand(next_token())) {
+	// 	if (String(next_token()) == String("//")) {
+	// 		skip_line();
+	// 	}
+	// 	expression.push_back(next_token());
+	// 	read_next_token();
+	// }
+	// int result = parse(expression);
 	cout << result;
 }
 
