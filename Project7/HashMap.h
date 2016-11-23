@@ -10,17 +10,17 @@ namespace std {
 		public:
 			int operator() (const String& s) const {
 				const char* str = s.c_str();
+				unsigned int hash = 7;
 
-				if (s.len == 0)
-					return 0;
-				if (s.len == 1) 
-					return str[0] - 'a';
-				return (str[0] - 'a' + 1) * (str[1] - 'a' + 1);
+				for (int k = 0; k < s.size(); k++) {
+					hash = hash * 31 + str[k];
+				}
+				return hash;
 			}
 	};
 }
 
-#define TABLE_SIZE 676
+#define TABLE_SIZE 100
 
 template <typename K, typename V> 
 class HashMap {
@@ -39,6 +39,11 @@ class HashMap {
 				this->value = value;
 			}
 
+			HashEntry(const HashEntry& that) {
+				this->key = that.key;
+				this->value = that.value;
+			}
+
 			bool operator==(HashEntry that) const {
 				if (this->key == that.key) return true;
 				return false;
@@ -53,6 +58,7 @@ class HashMap {
 	public:
 		// An array of pointers to LinkedLists of HashEntries
 		LinkedListSet<HashEntry>** table;
+		int spotsOccupied;
 
 		HashMap() {
 			table = new LinkedListSet<HashEntry>* [TABLE_SIZE];
@@ -69,18 +75,32 @@ class HashMap {
 			delete table;
 		}
 
-		void put(K key, V value) {
+		bool count(K key) {
 			int hashValue = hashFunction(key) % TABLE_SIZE;
+			if (hashValue < 0) hashValue *= -1;
+ 
 			LinkedListSet<HashEntry>* hashEntries = table[hashValue];
-			hashEntries->insert_element(HashEntry(key, value));
+			if (hashEntries == NULL) {
+				return false;
+			}
+			return hashEntries->is_element(HashEntry(key, V()));
 		}
 
-		V get(K key) {
+		V& operator[](K key) {
 			int hashValue = hashFunction(key) % TABLE_SIZE;
+			if (hashValue < 0) hashValue *= -1;
 			LinkedListSet<HashEntry>* hashEntries = table[hashValue];
-			HashEntry* foundEntry = hashEntries->find_element(HashEntry(key, 0));
-			if (foundEntry != NULL)
-				return foundEntry->value;
-			return NULL;
+			if (hashEntries == NULL) {
+				spotsOccupied++;
+				table[hashValue] = new LinkedListSet<HashEntry>();
+			} 
+			hashEntries = table[hashValue];
+			hashEntries->insert_element(HashEntry(key, V()));
+			return hashEntries->find_element(HashEntry(key, V())).value;
+
+		}
+
+		int getCount() {
+			return spotsOccupied;
 		}
 };

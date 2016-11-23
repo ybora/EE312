@@ -30,7 +30,6 @@ public:
 		return *this;
 	}
 
-
 	/*
 	 * clients can gain access to the C-compatible string (i.e., the char*) by 
 	 * invoking myString.c_str() 

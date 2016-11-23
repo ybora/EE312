@@ -86,7 +86,7 @@ public:
 	/**
 	 * Find and return the element in the list
 	 */
-	T* find_element(const T& x);
+	T& find_element(const T& x);
 
 	/**
 	 * Remove element from the set, if the element doesn't
@@ -192,12 +192,10 @@ bool LinkedListSet<T>::is_element(const T& x){
 } // End is_element
 
 template <typename T>
-T* LinkedListSet<T>::find_element(const T& x) {
+T& LinkedListSet<T>::find_element(const T& x) {
 	Node* n = nullptr;
-    if (is_element(x, n)) {
-    	return &n->data;
-    }
-    return nullptr;
+	is_element(x, n);
+	return n->data;
 }
 
 

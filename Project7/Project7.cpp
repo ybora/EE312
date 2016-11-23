@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "HashMap.h"
 
 String var = String("var");
 String set = String("set");
@@ -11,9 +12,8 @@ String output = String("output");
 
 using namespace std;
 
-map<String, int> variables;
+HashMap<String, int> variables;
 
-// operate on the two operands
 int operate(String op, int arg1, int arg2) {
 	if (op == "+") { return arg1 + arg2; }
 	else if (op == "-") { return arg1 - arg2; }
@@ -48,18 +48,17 @@ bool isUnaryOperator(String op) {
 	return false;
 }
 
-// operate on the two operands
-// This is the primary method in this exercise.
-// It is called recursively
 int parse(vector<String>& expr) {
 	// This method destroys the expr being passed in!
 	String first = String(expr[0]); // get first token in string
 	expr.erase(expr.begin()); // remove it
-							  // base case; if first token is a number (not operator), return the number
 	
-	if (variables.count(first)) return variables[first];
+	if (variables.count(first)) {
+		return variables[first];
+	}
 
 	if (isUnaryOperator(first)) {
+		// Recursively get next operand
 		int temp = parse(expr);
 
 		if (first == String("~")) {
@@ -77,6 +76,7 @@ int parse(vector<String>& expr) {
 	// else parse the two operands recursively
 	int arg1 = parse(expr);
 	int arg2 = parse(expr);
+
 	return operate(first, arg1, arg2);
 }
 
@@ -92,9 +92,12 @@ bool isCommand(String token) {
 }
 
 void processText() {
+	// read and output the next thing
 	read_next_token();
 	cout << next_token();
 	checkForComment();
+
+	// keep going
 	read_next_token();
 	checkForComment();
 }
@@ -102,7 +105,7 @@ void processText() {
 int continueReading() {
 	vector<String> expression;
 	read_next_token();
-	while (!isCommand(next_token())) {
+	while (!isCommand(next_token()) && next_token_type != END) {
 		if (String(next_token()) == String("//")) {
 			skip_line();
 		}
@@ -132,16 +135,10 @@ void processVar() {
 	int result = continueReading();
 
 	if (variables.count(varName)) {
-		cout << "variable incorrectly re-initialized" << endl;
+		cout << "variable " << varName.c_str() << " incorrectly re-initialized" << endl;
 	}
 
 	variables[varName] = result;
-}
-
-void printVector(vector<String> v) {
-	for (int k = 0; k < v.size(); k++) {
-		cout << v[k].c_str() << endl;
-	}
 }
 
 void processOutput() {
@@ -173,4 +170,5 @@ void parseFile() {
 
 void run() {
 	parseFile();
+	cout << variables.getCount() << endl;
 }

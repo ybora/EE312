@@ -1,5 +1,5 @@
 var x 42
-text "output x -- " output x text \n
+text "output x -- " output x text \n 
 set x + x 1
 text "after increment, output x -- " output x text \n
 text "output ~ x -- " output ~ x text \n
