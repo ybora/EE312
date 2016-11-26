@@ -3,16 +3,26 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "HashMap.h"
 
 String var = String("var");
 String set = String("set");
 String text = String("text");
 String output = String("output");
+String doToken = String("do");
+String od = String("od");
+String ifToken = String("if");
+String fi = String("fi");
 
 using namespace std;
 
-HashMap<String, int> variables;
+map<String, int> variables;
+
+void printVector(vector<String> x) {
+	for (int k = 0; k < x.size(); k++) {
+		cout << x[k].c_str() << " ";
+	}
+	cout << endl;
+}
 
 int operate(String op, int arg1, int arg2) {
 	if (op == "+") { return arg1 + arg2; }
@@ -88,7 +98,7 @@ void checkForComment() {
 }
 
 bool isCommand(String token) {
-	return (token == var || token == set || token == output || token == text);
+	return (token == var || token == set || token == output || token == text || token == doToken);
 }
 
 void processText() {
@@ -100,6 +110,13 @@ void processText() {
 	// keep going
 	read_next_token();
 	checkForComment();
+}
+
+void processText(vector<String>& statements, int& start) {
+	start++;
+	cout << statements[start].c_str();
+
+	start++;
 }
 
 int continueReading() {
@@ -117,6 +134,17 @@ int continueReading() {
 	return result;
 }
 
+int continueReading(vector<String>& statements, int& start) {
+	vector<String> expression;
+	start++;
+	while (start < statements.size() && !isCommand(statements[start])) {
+		expression.push_back(statements[start]);
+		start++;
+	}
+	int result = parse(expression);
+	return result;
+}
+
 void processSet() {
 	read_next_token();
 	String varName = String(next_token());
@@ -125,6 +153,14 @@ void processSet() {
 	if (!variables.count(varName)) {
 		cout << "variable " << varName.c_str() << " not declared" << endl;
 	}
+
+	variables[varName] = result;
+}
+
+void processSet(vector<String>& statements, int& start) {
+	start++;
+	String varName = String(statements[start]);
+	int result = continueReading(statements, start);
 
 	variables[varName] = result;
 }
@@ -141,28 +177,109 @@ void processVar() {
 	variables[varName] = result;
 }
 
+void processVar(vector<String> statements, int& start) {
+	start++;
+	String varName = String(statements[start]);
+	int result = continueReading(statements, start);
+
+	variables[varName] = result;
+}
+
 void processOutput() {
 	int result = continueReading();
 	cout << result;
+}
+
+void processOutput(vector<String> statements, int& start) {
+	int result = continueReading(statements, start);
+	cout << result;
+}
+
+void doDo(vector<String>& tokens) {
+	for (int k = 0; k < tokens.size();) {
+		if (tokens[k] == var) {
+			processVar(tokens, k);
+		}
+		else if (tokens[k] == set) {
+			processSet(tokens, k);
+		} 
+		else if (tokens[k] == text) {
+			processText(tokens, k);
+		}
+		else if (tokens[k] == output) {
+			processOutput(tokens, k);
+		}
+	}
+}
+
+void processDo() {
+	vector<String> expression;
+	read_next_token();
+	while (!isCommand(next_token())) {
+		checkForComment();
+		expression.push_back(next_token());
+		read_next_token();
+	}
+
+	vector<String> copy = expression;
+	vector<String> mainCopy = expression;
+	printVector(expression);
+	int result = parse(expression);
+
+	vector<String> tokens;
+	if (result) {
+		while (String(next_token()) != od) {
+			checkForComment();
+			if (String(next_token()) == doToken) {
+				printVector(tokens);
+				doDo(tokens);
+				processDo();
+			}
+			tokens.push_back(next_token());
+			read_next_token();
+		}
+	}
+
+	while (parse(copy)) {
+		doDo(tokens);
+		copy = mainCopy;
+	}
+}
+
+void processIf() {
+
 }
 
 void parseFile() {
 	read_next_token();
 	checkForComment();
 	while (next_token_type != END) {
+		checkForComment();
 		if (next_token_type == NAME) {
 			String currentToken = String(next_token());
 			if (currentToken == var) {
 				processVar();
 			} 
-			if (currentToken == set) {
+			else if (currentToken == set) {
 				processSet();
 			}
-			if (currentToken == text) {
+			else if (currentToken == text) {
 				processText();
 			}
-			if (currentToken == output) {
+			else if (currentToken == output) {
 				processOutput();
+			}
+			else if (currentToken == doToken) {
+				processDo();
+			}
+			else if (currentToken == ifToken) {
+				processIf();
+			}
+			else if (currentToken == od) {
+				read_next_token();
+			}
+			else if (currentToken == fi) {
+				read_next_token();
 			}
 		}
 	}
@@ -170,5 +287,4 @@ void parseFile() {
 
 void run() {
 	parseFile();
-	cout << variables.getCount() << endl;
 }

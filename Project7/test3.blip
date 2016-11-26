@@ -1,26 +1,17 @@
-text "output 42 -- " 
-output 42 // prints 42
-text \n 
-
-text "output + 42 42 -- "
-output + 42 42 // prints 84
+var x 1
+do <= x 10 
+output x
 text \n
-
-text "output + 42 + 10 5 -- "
-output + 42 + 10 5 // prints 57
-text \n
-
-text "output * 5 + 2 2 -- "
-output * 5 + 2 2
-text \n
-
-text "output + * 5 3 + 4 4 -- "
-output + * 5 3 + 4 4
-text \n
-
-text "output - 0 4 -- "
-output - 0 4
-text \n
-
-text "Hello World\n"
-
+set x + x 1
+od
+if == x 11
+text "Well Done! "
+text "Your if statement worked correctly\n"
+else 
+text "oops!\n"
+fi
+if > x x
+text "oops, failed\n"
+else
+text "hooray!\n"
+fi

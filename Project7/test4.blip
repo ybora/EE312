@@ -1,6 +1,18 @@
-var x 42
-text "output x -- " output x text \n 
+var x 1
+
+defun foo params x y smarap
 set x + x 1
-text "after increment, output x -- " output x text \n
-text "output ~ x -- " output ~ x text \n
-text "Hello World\n"
+return + x y
+nufed
+
+do <= x 10 
+text "global x is: "
+output x
+text \n
+
+text "result of calling foo is: "
+output call foo args x x sgra 
+text \n
+text \n
+set x + x 1
+od
