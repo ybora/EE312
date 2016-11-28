@@ -195,8 +195,8 @@ void processOutput(vector<String> statements, int& start) {
 	cout << result;
 }
 
-void doDo(vector<String>& tokens) {
-	for (int k = 0; k < tokens.size();) {
+void processDo(vector<String>& tokens, int& start) {
+	for (int k = start; k < tokens.size();) {
 		if (tokens[k] == var) {
 			processVar(tokens, k);
 		}
@@ -208,6 +208,22 @@ void doDo(vector<String>& tokens) {
 		}
 		else if (tokens[k] == output) {
 			processOutput(tokens, k);
+		}
+		else if (tokens[k] == doToken) {
+			vector<String> expression;
+			k++;
+			while (!isCommand(tokens[k])) {
+				checkForComment();
+				expression.push_back(tokens[k]);
+				k++;
+			}
+			vector<String> copy = expression;
+			while (parse(copy)) {
+				processDo(tokens, k);
+				copy = expression;
+			}
+		} else if (tokens[k] == od) {
+			break;
 		}
 	}
 }
@@ -222,27 +238,25 @@ void processDo() {
 	}
 
 	vector<String> copy = expression;
-	vector<String> mainCopy = expression;
-	printVector(expression);
-	int result = parse(expression);
 
 	vector<String> tokens;
-	if (result) {
-		while (String(next_token()) != od) {
-			checkForComment();
-			if (String(next_token()) == doToken) {
-				printVector(tokens);
-				doDo(tokens);
-				processDo();
-			}
-			tokens.push_back(next_token());
-			read_next_token();
+	int count = 0;
+	while (String(next_token()) != od || count != 0) {
+		checkForComment();
+		if (String(next_token()) == doToken) {
+			count++;
 		}
+		else if (String(next_token()) == od) {
+			count--;
+		}
+		tokens.push_back(next_token());
+		read_next_token();
 	}
 
+	int start = 0;
 	while (parse(copy)) {
-		doDo(tokens);
-		copy = mainCopy;
+		processDo(tokens, start);
+		copy = expression;
 	}
 }
 
