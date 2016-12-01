@@ -5,6 +5,46 @@ Inventory Diapers 200
 Purchase Craig Bottles 4
 Purchase Craig Diapers 20
 Purchase Craig Diapers 100
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+Purchase Craig Bottles 4
+
+
+Inventory Diapers 200
+Purchase Aa Bottles 1
+Purchase Ab Bottles 1
+Purchase Ac Bottles 1
+Purchase Ad Bottles 1
+Purchase Ae Bottles 1
+Purchase Af Bottles 1
+Purchase Ag Bottles 1
+Purchase Ah Bottles 1
+Purchase Ai Bottles 1
+Purchase Aj Bottles 1
+Purchase Ak Bottles 1
+Purchase Al Bottles 1
+Purchase Am Bottles 1
+Purchase An Bottles 1
+Purchase Ao Bottles 1
+Purchase Ap Bottles 1
+Purchase Aq Bottles 1
+Purchase Ar Bottles 1
+Purchase As Bottles 1
+Purchase At Bottles 1
+Purchase Au Bottles 1
+Purchase Aw Bottles 1
+Purchase Ax Bottles 1
+Purchase Ay Bottles 1
+Purchase Az Bottles 1
 
 
 Summarize

@@ -1,9 +1,10 @@
 var x 0
-text "testing a loop"
-text \n
 
-do < x 10
-	output x
-	text \n
-	set x + x 1
+do < x 10 
+  output x
+  text " "
+  set x + x 1
+  // text "yo"
 od
+
+

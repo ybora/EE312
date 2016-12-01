@@ -70,11 +70,12 @@ Customer& CustomerDB::operator[](String name) { // not done, your effort goes he
 			newData[length] = Customer(name);
 			delete[] this->data;
 			this->data = newData;
+			this->capacity *= 2;
 		} else {
+			cout << name.c_str() << endl;
 			this->data[length] = Customer(name);
 		}
 		this->length++;
-		this->capacity *= 2;
 		return this->data[length - 1]; 
 	}
 }
