@@ -9,9 +9,6 @@
 
 using namespace std;
 
-void processDo();
-void processDo(vector<String>& tokens, int& start);
-
 /*
  * [NAME] operate
  * [Brief] performs a mathematical operation on the given operands
@@ -87,6 +84,17 @@ bool isCommand(String token);
  *  Then checks for a comment
  */
 void processText();
+
+/*
+ * [NAME] processText
+ * [Brief] processes the text command in blip
+ * [Returns] void
+ * [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Reads in the next token and outputs it to the screen
+ *  Then checks for a comment
+ */
 void processText(vector<String>& tokens, int& start);
 
 /*
@@ -100,6 +108,18 @@ void processText(vector<String>& tokens, int& start);
  *  Used as a helper function for processOutput, processSet, and processVar.
  */
 int continueReading();
+
+/*
+ * [NAME] continueReading
+ * [Brief] continues reading the expression from the file
+ * [Returns] int: the result of the parsed expression
+ * [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Continues reading the current line till the end of the file or till the next 
+ *  command, then calls parse to compute the result of the expression and then returns it.
+ *  Used as a helper function for processOutput, processSet, and processVar.
+ */
 int continueReading(vector<String>& tokens, int& start);
 
 /*
@@ -113,6 +133,18 @@ int continueReading(vector<String>& tokens, int& start);
  *  initialize the variable.
  */
 void processSet();
+
+/*
+ * [NAME] processSet
+ * [Brief] processes the set command in blip
+ * [Returns] void
+ * [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Processes the set command by using continueReading and then storing the result 
+ *  into a variable in the map. Different from var because the set command is supposed to re-
+ *  initialize the variable.
+ */
 void processSet(vector<String>& tokens, int& start);
 
 /*
@@ -126,8 +158,19 @@ void processSet(vector<String>& tokens, int& start);
  *  initialize the variable.
  */
 void processVar();
-void processVar(vector<String>& tokens, int& start);
 
+/*
+ * [NAME] processVar
+ * [Brief] processes the var command in blip
+ * [Returns] void
+ * [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Processes the var command by using continueReading and then storing the result 
+ *  into a variable in the map. Different from set because the var command is supposed to first
+ *  initialize the variable.
+ */
+void processVar(vector<String>& tokens, int& start);
 
 /*
  * [NAME] processOutput
@@ -139,6 +182,17 @@ void processVar(vector<String>& tokens, int& start);
  *  the result to the console 
  */
 void processOutput();
+
+/*
+ * [NAME] processOutput
+ * [Brief] processes the output command in blip
+ * [Returns] void
+ * [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Processes the output command by using continueReading and then outputting
+ *  the result to the console 
+ */
 void processOutput(vector<String>& tokens, int& start);
 
 
@@ -163,7 +217,50 @@ void parseFile();
  */
 void run();
 
+/*
+ * [NAME] processIf
+ * [Brief] processes the if command in blip
+ * [Returns] void
+ * [IN] void
+ *
+ * [Summary] Processes the if command in blip by evaluating the if condition and parsing until
+ *  detection of an else or the end of an if signified by fi
+ */
 void processIf();
+
+/*
+ * [NAME] processIf
+ * [Brief] processes the if command in blip
+ * [Returns] void
+ * [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Processes the if command in blip by evaluating the if condition and parsing until
+ *  detection of an else or the end of an if signified by fi
+ */
 void processIf(vector<String>& tokens, int& start);
+
+/*
+ * [NAME] processDo
+ * [Brief] processes the do command in blip
+ * [Returns] void
+ * [IN] void
+ *
+ * [Summary] Processes the do command in blip by evaluating the do condition and parsing until
+ * detection of an od command and then rechecking the condition to reiterate through
+ */
+void processDo();
+
+/*
+ * [NAME] processDo
+ * [Brief] processes the do command in blip
+ * [Returns] void
+*  [IN] vector<String>& tokens: the tokens inside the do loop
+ * [IN] int& start: the starting point of the tokens vector
+ *
+ * [Summary] Processes the do command in blip by evaluating the do condition and parsing until
+ * detection of an od command and then rechecking the condition to reiterate through
+ */
+void processDo(vector<String>& tokens, int& start);
 
 #endif
