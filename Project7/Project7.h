@@ -9,6 +9,9 @@
 
 using namespace std;
 
+void processDo();
+void processDo(vector<String>& tokens, int& start);
+
 /*
  * [NAME] operate
  * [Brief] performs a mathematical operation on the given operands
@@ -84,6 +87,7 @@ bool isCommand(String token);
  *  Then checks for a comment
  */
 void processText();
+void processText(vector<String>& tokens, int& start);
 
 /*
  * [NAME] continueReading
@@ -96,6 +100,7 @@ void processText();
  *  Used as a helper function for processOutput, processSet, and processVar.
  */
 int continueReading();
+int continueReading(vector<String>& tokens, int& start);
 
 /*
  * [NAME] processSet
@@ -108,6 +113,7 @@ int continueReading();
  *  initialize the variable.
  */
 void processSet();
+void processSet(vector<String>& tokens, int& start);
 
 /*
  * [NAME] processVar
@@ -120,6 +126,8 @@ void processSet();
  *  initialize the variable.
  */
 void processVar();
+void processVar(vector<String>& tokens, int& start);
+
 
 /*
  * [NAME] processOutput
@@ -131,6 +139,8 @@ void processVar();
  *  the result to the console 
  */
 void processOutput();
+void processOutput(vector<String>& tokens, int& start);
+
 
 /*
  * [NAME] parseFile
@@ -152,5 +162,8 @@ void parseFile();
  * [Summary] Wrapper function for parseFile to be run in the main
  */
 void run();
+
+void processIf();
+void processIf(vector<String>& tokens, int& start);
 
 #endif

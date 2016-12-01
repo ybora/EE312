@@ -16,6 +16,9 @@ String elseToken = String("else");
 
 using namespace std;
 
+void processDo();
+void processDo(vector<String>& tokens, int& start);
+
 map<String, int> variables;
 
 void printVector(vector<String> x) {
@@ -204,71 +207,75 @@ void processOutput(vector<String> statements, int& start) {
 	cout << result;
 }
 
-void processDo(vector<String>& tokens, int& start) {
-	for (int k = start; k < tokens.size();) {
-		if (tokens[k] == var) {
-			processVar(tokens, k);
-		}
-		else if (tokens[k] == set) {
-			processSet(tokens, k);
-		} 
-		else if (tokens[k] == text) {
-			processText(tokens, k);
-		}
-		else if (tokens[k] == output) {
-			processOutput(tokens, k);
-		}
-		else if (tokens[k] == doToken) {
-			vector<String> expression;
-			k++;
-			while (!isCommand(tokens[k])) {
-				checkForComment();
-				expression.push_back(tokens[k]);
-				k++;
+void processIf(vector<String>& tokens, int& start) {
+	int result = continueReading(tokens, start);
+	if (result != 0) {
+		while (tokens[start] != fi && tokens[start] != elseToken) {
+			String currentToken = tokens[start];
+			if (currentToken == var) {
+				processVar(tokens, start);
+			} 
+			else if (currentToken == set) {
+				processSet(tokens, start);
 			}
-			vector<String> copy = expression;
-			while (parse(copy)) {
-				processDo(tokens, k);
-				copy = expression;
+			else if (currentToken == text) {
+				processText(tokens, start);
 			}
-		} else if (tokens[k] == od) {
-			break;
+			else if (currentToken == output) {
+				processOutput(tokens, start);
+			}
+			// else if (currentToken == doToken) {
+			// 	processDo(tokens, start);
+			// }
+			else if (currentToken == ifToken) {
+				processIf(tokens, start);
+			}
+			// else if (currentToken == od) {
+			// 	start++;
+			// }
+			else if (currentToken == fi) {
+				start++;
+			}
+		}
+		while (tokens[start] != fi && start < tokens.size()) {
+			start++;
+		}
+		start++;
+	} else {
+		while (tokens[start] != elseToken && tokens[start] != fi) {
+			start++;
+		}
+		while (tokens[start] != fi && start < tokens.size()) {
+			String currentToken = tokens[start];
+			if (currentToken == var) {
+				processVar(tokens, start);
+			} 
+			else if (currentToken == set) {
+				processSet(tokens, start);
+			}
+			else if (currentToken == text) {
+				processText(tokens, start);
+			}
+			else if (currentToken == output) {
+				processOutput(tokens, start);
+			}
+			// else if (currentToken == doToken) {
+			// 	processDo(tokens, start);
+			// }
+			else if (currentToken == ifToken) {
+				processIf(tokens, start);
+			}
+			// else if (currentToken == od) {
+			// 	start++;
+			// }
+			else if (currentToken == elseToken) {
+				start++;
+			}
+			else if (currentToken == fi) {
+				start++;
+			}
 		}
 	}
-}
-
-void processDo() {
-	vector<String> expression;
-	read_next_token();
-	while (!isCommand(next_token())) {
-		checkForComment();
-		expression.push_back(next_token());
-		read_next_token();
-	}
-
-	vector<String> copy = expression;
-	vector<String> tokens;
-	int count = 0;
-	while (String(next_token()) != od || count != 0) {
-		checkForComment();
-		if (String(next_token()) == doToken) {
-			count++;
-		}
-		else if (String(next_token()) == od && count != 0) {
-			count--;
-		}
-		else if (String(next_token()) == od && count == 0) {
-			break;
-		}
-		tokens.push_back(next_token());
-		read_next_token();
-	}
-
-	int start = 0;
-	while (parse(copy)) {
-		processDo(tokens, start);
-		copy = expression;
-	} 
 }
 
 void processElse() {
@@ -277,78 +284,11 @@ void processElse() {
 	}
 }
 
-// void processIf(vector<String>& tokens, int& start) {
-// 	int result = continueReading(tokens, start);
-// 	if (result != 0) {
-// 		while (tokens[start] != fi && tokens[start] != elseToken) {
-// 			String currentToken = String(next_token());
-// 			checkForComment();
-// 			if (currentToken == var) {
-// 				processVar();
-// 			} 
-// 			else if (currentToken == set) {
-// 				processSet();
-// 			}
-// 			else if (currentToken == text) {
-// 				processText();
-// 			}
-// 			else if (currentToken == output) {
-// 				processOutput();
-// 			}
-// 			else if (currentToken == doToken) {
-// 				processDo();
-// 			}
-// 			else if (currentToken == ifToken) {
-// 				processIf();
-// 			}
-// 			else if (currentToken == od) {
-// 				start++;
-// 			}
-// 			else if (currentToken == fi) {
-// 				start++;
-// 			}
-// 		}
-// 		while (String(next_token()) != fi && next_token_type != END) {
-// 			read_next_token();
-// 		}
-// 		read_next_token();
-// 	} else {
-// 		while (String(next_token()) != elseToken && String(next_token()) != fi) {
-// 			read_next_token();
-// 		}
-// 		while (String(next_token()) != fi && next_token_type != END) {
-// 			checkForComment();
-// 			String currentToken = String(next_token());
-// 			if (currentToken == var) {
-// 				processVar();
-// 			} 
-// 			else if (currentToken == set) {
-// 				processSet();
-// 			}
-// 			else if (currentToken == text) {
-// 				processText();
-// 			}
-// 			else if (currentToken == output) {
-// 				processOutput();
-// 			}
-// 			else if (currentToken == doToken) {
-// 				processDo();
-// 			}
-// 			else if (currentToken == ifToken) {
-// 				processIf();
-// 			}
-// 			else if (currentToken == od) {
-// 				read_next_token();
-// 			}
-// 			else if (currentToken == elseToken) {
-// 				read_next_token();
-// 			}
-// 			else if (currentToken == fi) {
-// 				read_next_token();
-// 			}
-// 		}
-// 	}
-// }
+void processElse(vector<String>& tokens, int& start) {
+	while (tokens[start] != fi) {
+		start++;
+	}
+}
 
 void processIf() {
 	int result = continueReading();
@@ -421,6 +361,83 @@ void processIf() {
 			}
 		}
 	}
+}
+
+void processDo(vector<String>& tokens, int& start) {
+	for (int k = start; k < tokens.size();) {
+		if (tokens[k] == var) {
+			processVar(tokens, k);
+		}
+		else if (tokens[k] == set) {
+			processSet(tokens, k);
+		} 
+		else if (tokens[k] == text) {
+			processText(tokens, k);
+		}
+		else if (tokens[k] == output) {
+			processOutput(tokens, k);
+		}
+		else if (tokens[k] == doToken) {
+			vector<String> expression;
+			k++;
+			while (!isCommand(tokens[k])) {
+				checkForComment();
+				expression.push_back(tokens[k]);
+				k++;
+			}
+			vector<String> copy = expression;
+			while (parse(copy)) {
+				processDo(tokens, k);
+				copy = expression;
+			}
+		} 
+		else if (tokens[k] == od) {
+			break;
+		} 
+		else if (tokens[k] == ifToken) {
+			processIf(tokens, k);
+		}
+		else if (tokens[k] == elseToken) {
+			processElse(tokens, k);
+		}
+		else if (tokens[k] == fi) {
+			k++;
+		}
+	}
+}
+
+void processDo() {
+	vector<String> expression;
+	read_next_token();
+	while (!isCommand(next_token())) {
+		checkForComment();
+		expression.push_back(next_token());
+		read_next_token();
+	}
+
+	vector<String> copy = expression;
+	vector<String> tokens;
+	int count = 0;
+	while (String(next_token()) != od || count != 0) {
+		checkForComment();
+		if (String(next_token()) == doToken) {
+			count++;
+		}
+		else if (String(next_token()) == od && count != 0) {
+			count--;
+		}
+		else if (String(next_token()) == od && count == 0) {
+			break;
+		}
+		tokens.push_back(next_token());
+		read_next_token();
+	}
+
+	int start = 0;
+	while (parse(copy)) {
+		processDo(tokens, start);
+		copy = expression;
+	} 
 }
 
 void parseFile() {

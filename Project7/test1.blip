@@ -2,9 +2,19 @@ var x 0
 
 do < x 10 
   output x
-  text " "
+  text "\n"
   set x + x 1
-  // text "yo"
+  if 1
+    text "holy shit"
+    if 0
+      text "omg......"
+    else 
+      text "no way"
+    fi
+  else
+    text "no"
+  fi
+  text "yo"
 od
 
 
